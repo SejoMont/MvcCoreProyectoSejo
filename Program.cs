@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using MvcCoreProyectoSejo.Models;
+using MvcCoreProyectoSejo.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//SQL CONNECTION
+builder.Services.AddTransient<EventosRepository>();
+string connectionString =
+    builder.Configuration.GetConnectionString("SqlServerSejo");
+builder.Services.AddDbContext<EventosContext>
+    (options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
