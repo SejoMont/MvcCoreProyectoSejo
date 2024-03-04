@@ -19,5 +19,7 @@ namespace MvcCoreProyectoSejo.Models
         public DbSet<Resena> Resenas { get; set; }
         public DbSet<AsistenciaEvento> AsistenciasEventos { get; set; }
         public DbSet<Seguimiento> Seguimientos { get; set; }
+        public DbSet<EventoDetalles> EventosDetalles { get; set; }
+        public DbSet<UsuarioDetalles> UsuariosDetalles { get; set; }
     }
 }

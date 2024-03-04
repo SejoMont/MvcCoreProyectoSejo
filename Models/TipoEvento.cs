@@ -11,7 +11,8 @@ namespace MvcCoreProyectoSejo.Models
         public int Id { get; set; }
 
         [Column("Tipo")]
-        [StringLength(50)]
         public string Nombre { get; set; }
+        [Column("Imagen")]
+        public string Imagen { get; set; }
     }
 }
