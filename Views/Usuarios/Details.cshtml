@@ -1,4 +1,6 @@
 ﻿@model MvcCoreProyectoSejo.Models.UsuarioDetalles
+@using MvcCoreProyectoSejo.Helpers
+@inject MvcCoreProyectoSejo.Helpers.HelperPathProvider HelperPathProvider
 
 @{
     ViewData["Title"] = "DetalleUsers";
@@ -60,7 +62,15 @@
         </dd>
     </dl>
 </div>
+<img style="width: 550px" class="team-image" src="@HelperPathProvider.MapUrlPath(Model.FotoPerfil, Folders.Usuarios)" />
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <ul>
+        @foreach (var evento in ViewData["Eventos"] as List<EventoDetalles>)
+        {
+            <li>
+                <a asp-controller="Eventos" asp-action="Details" asp-route-id="@evento.Id">@evento.NombreEvento</a>
+            </li>
+        }
+    </ul>
 </div>
+

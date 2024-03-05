@@ -24,21 +24,6 @@ using System.Diagnostics.Metrics;
 //JOIN Provincias P ON E.Provincia = P.ProvinciaID
 //JOIN Usuarios U ON E.Recinto = U.UsuarioID;
 
-//CREATE VIEW VISTA_DETALLE_USUARIO AS
-//SELECT
-//    U.UsuarioID,
-//    U.NombreUsuario,
-//    U.FotoPerfil,
-//    U.Correo,
-//    U.Telefono,
-//    U.ProvinciaID,
-//    U.Descripcion,
-//    R.NombreRol,
-//    AE.EventoID
-//FROM Usuarios U
-//INNER JOIN ArtistasEvento AE ON U.UsuarioID = AE.ArtistaID
-//INNER JOIN Roles R ON U.RolID = R.RolID;
-
 //CREATE PROCEDURE SP_ALL_EVENTOS
 //AS
 //BEGIN
@@ -62,21 +47,13 @@ using System.Diagnostics.Metrics;
 //    WHERE TipoEvento = @tipoevento;
 //END;
 
-//CREATE PROCEDURE SP_ARTISTAS_EVENTO(@idevento INT)
+//CREATE PROCEDURE SP_EVENTOS_ARTISTA
+//    @idartista INT
 //AS
 //BEGIN
 //    SELECT *
-//    FROM VISTA_DETALLE_USUARIO
-//    WHERE EventoID = @idevento;
-//END;
-
-//CREATE PROCEDURE SP_USUARIO_DETALLE
-//    (@idusuario INT)
-//AS
-//BEGIN
-//    SELECT *
-//    FROM VISTA_DETALLE_USUARIO
-//    WHERE UsuarioID = @idusuario;
+//    FROM VISTA_DETALLES_EVENTO
+//    WHERE EventoID IN (SELECT EventoID FROM ArtistasEvento WHERE ArtistaID = @idartista);
 //END;
 #endregion
 
@@ -122,21 +99,12 @@ namespace MvcCoreProyectoSejo.Repository
             return await consulta.ToListAsync();
         }
 
-        public async Task<List<UsuarioDetalles>> GetAllArtistasEventoAsync(int idevento)
+        public async Task<List<EventoDetalles>> GetAllEventosArtistaAsync(int idartista)
         {
-            string sql = "SP_ARTISTAS_EVENTO @idevento";
-            SqlParameter pamId = new SqlParameter("@idevento", idevento);
-            var consulta = this.context.UsuariosDetalles.FromSqlRaw(sql, pamId);
+            string sql = "SP_EVENTOS_ARTISTA @idartista";
+            SqlParameter pamIdArtista= new SqlParameter("@idartista", idartista);
+            var consulta = this.context.EventosDetalles.FromSqlRaw(sql, pamIdArtista);
             return await consulta.ToListAsync();
-        }
-
-        public async Task<UsuarioDetalles> GetUsuarioDetalles(int iduser)
-        {
-            string sql = "SP_USUARIO_DETALLE @idusuario";
-            SqlParameter pamId = new SqlParameter("@idusuario", iduser);
-            var consulta = this.context.UsuariosDetalles.FromSqlRaw(sql, pamId);
-            UsuarioDetalles usuarioDetalles = consulta.AsEnumerable().FirstOrDefault();
-            return usuarioDetalles;
         }
     }
 }

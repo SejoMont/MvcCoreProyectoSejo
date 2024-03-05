@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using MvcCoreProyectoSejo.Extensions
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,7 +12,7 @@
     <link rel="stylesheet" href="~/MvcCoreProyectoSejo.styles.css" asp-append-version="true" />
 
     <!-- Modo oscuro -->
-    <style>
+    @* <style>
         body {
             background-color: #656565; /* Color de fondo oscuro */
             color: #fff; /* Color del texto en modo oscuro */
@@ -17,7 +20,6 @@
 
         a {
             color: aliceblue;
-
         }
 
         .navbar {
@@ -35,7 +37,7 @@
         .footer {
             background-color: #343a40; /* Color de fondo del pie de página */
         }
-    </style>
+    </style> *@
     <!-- Fin Modo oscuro -->
 </head>
 <body>
@@ -52,6 +54,33 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Eventos" asp-action="Index">Eventos Index</a>
                         </li>
+
+                        @{
+                            var currentUser = HttpContextAccessor.HttpContext.Session.GetObject<Usuario>("CurrentUser");
+                            if (currentUser != null)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        @currentUser.NombreUsuario
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="@Url.Action("Logout", "Usuarios")">Cerrar sesión</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Iniciar o Registrarse
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Registro">Registro</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Login">Login</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
             </div>

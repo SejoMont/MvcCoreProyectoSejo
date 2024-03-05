@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MvcCoreProyectoSejo.Helpers;
 using MvcCoreProyectoSejo.Models;
 using MvcCoreProyectoSejo.Repository;
 
@@ -7,8 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//SQL CONNECTION
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddSession();
+
+builder.Services.AddTransient<HelperMails>();
+builder.Services.AddTransient<HelperTools>();
+builder.Services.AddTransient<HelperPathProvider>();
+
 builder.Services.AddTransient<EventosRepository>();
+builder.Services.AddTransient<UsuariosRepository>();
 string connectionString =
     builder.Configuration.GetConnectionString("SqlServerSejo");
 builder.Services.AddDbContext<EventosContext>
@@ -30,6 +39,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

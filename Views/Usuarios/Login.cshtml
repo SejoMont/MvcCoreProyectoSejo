@@ -1,0 +1,12 @@
+﻿<form asp-action="Login" method="post">
+    <div class="mb-3">
+        <label for="email" class="form-label">Correo Electrónico</label>
+        <input type="email" class="form-control" id="email" name="correo">
+    </div>
+    <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <input type="hidden" value="1" name="rol" />
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>

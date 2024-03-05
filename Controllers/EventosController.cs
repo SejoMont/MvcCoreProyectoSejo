@@ -7,10 +7,12 @@ using MvcCoreProyectoSejo.Repository;
 public class EventosController : Controller
 {
     private EventosRepository repo;
+    private UsuariosRepository userRepo;
 
-    public EventosController(EventosRepository repo)
+    public EventosController(EventosRepository repo, UsuariosRepository userRepo)
     {
         this.repo = repo;
+        this.userRepo = userRepo;
     }
 
     public async Task<IActionResult> Index()
@@ -23,15 +25,6 @@ public class EventosController : Controller
         return View(eventos);
     }
 
-    public async Task<IActionResult> Details(int id)
-    {
-        EventoDetalles eventoDetalles = await this.repo.GetDetallesEventoAsync(id);
-        List<UsuarioDetalles> artistas = await this.repo.GetAllArtistasEventoAsync(id);
-
-        ViewData["Artistas"] = artistas;
-
-        return View(eventoDetalles);
-    }
 
     public async Task<IActionResult> TipoEvento(string tipo)
     {
@@ -43,10 +36,14 @@ public class EventosController : Controller
         return View(eventos);
     }
 
-    public async Task<IActionResult> DetalleUsers(int iduser)
+    public async Task<IActionResult> Details(int id)
     {
-        UsuarioDetalles usuarioDetalles = await this.repo.GetUsuarioDetalles(iduser);
+        EventoDetalles eventoDetalles = await this.repo.GetDetallesEventoAsync(id);
+        List<UsuarioDetalles> artistas = await this.userRepo.GetAllArtistasEventoAsync(id);
 
-        return View(usuarioDetalles);
+        ViewData["Artistas"] = artistas;
+
+        return View(eventoDetalles);
     }
+
 }
