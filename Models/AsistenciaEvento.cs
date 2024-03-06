@@ -16,16 +16,16 @@ namespace MvcCoreProyectoSejo.Models
         [Column("EventoID")]
         public int EventoID { get; set; }
 
-        [Column("NombreEntrada")]
-        public string NombreEntrada { get; set; }
+        [Column("Nombre")]
+        public string Nombre { get; set; }
 
-        [Column("CorreoEntrada")]
-        public string CorreoEntrada { get; set; }
+        [Column("Correo")]
+        public string Correo { get; set; }
 
-        [Column("DNIEntrada")]
-        public string DNIEntrada { get; set; }
+        [Column("DNI")]
+        public string Dni { get; set; }
 
-        [Column("QRImagen")]
-        public string QRImagen { get; set; }
+        [Column("QR")]
+        public string QR { get; set; }
     }
 }

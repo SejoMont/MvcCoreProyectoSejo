@@ -7,20 +7,35 @@
 //    U.Correo,
 //    U.Telefono,
 //    U.ProvinciaID,
-//    P.NombreProvincia,  
+//    P.NombreProvincia,
 //    U.Descripcion,
-//    R.NombreRol,
-//    AE.EventoID
+//    U.Activo,
+//    R.NombreRol
 //FROM Usuarios U
-//INNER JOIN ArtistasEvento AE ON U.UsuarioID = AE.ArtistaID
 //INNER JOIN Roles R ON U.RolID = R.RolID
-//INNER JOIN Provincias P ON U.ProvinciaID = P.ProvinciaID;  
+//INNER JOIN Provincias P ON U.ProvinciaID = P.ProvinciaID;
+
+//create view vista_detalle_artista as
+//select
+//    u.usuarioid,
+//u.nombreusuario,
+//    u.fotoperfil,
+//    u.provinciaid,
+//    p.nombreprovincia,
+//    u.descripcion,
+//    r.nombrerol,
+//    r.RolID,
+//    ae.eventoid
+//from usuarios u
+//inner join artistasevento ae on u.usuarioid = ae.artistaid
+//inner join roles r on u.rolid = r.rolid
+//inner join provincias p on u.provinciaid = p.provinciaid;  
 
 //CREATE PROCEDURE SP_ARTISTAS_EVENTO(@idevento INT)
 //AS
 //BEGIN
 //    SELECT *
-//    FROM VISTA_DETALLE_USUARIO
+//    FROM vista_detalle_artista
 //    WHERE EventoID = @idevento;
 //END;
 
@@ -49,11 +64,11 @@ namespace MvcCoreProyectoSejo.Repository
         {
             this.context = context;
         }
-        public async Task<List<UsuarioDetalles>> GetAllArtistasEventoAsync(int idevento)
+        public async Task<List<ArtistaDetalles>> GetAllArtistasEventoAsync(int idevento)
         {
             string sql = "SP_ARTISTAS_EVENTO @idevento";
             SqlParameter pamId = new SqlParameter("@idevento", idevento);
-            var consulta = this.context.UsuariosDetalles.FromSqlRaw(sql, pamId);
+            var consulta = this.context.ArtistasDetalles.FromSqlRaw(sql, pamId);
             return await consulta.ToListAsync();
         }
 

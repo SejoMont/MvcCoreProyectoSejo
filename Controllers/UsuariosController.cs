@@ -90,7 +90,7 @@ namespace MvcCoreProyectoSejo.Controllers
                 mensaje += "<p>Muchas gracias</p>";
                 await this.helperMails.SendMailAsync(correo, "Registro Usuario", mensaje);
 
-                return RedirectToAction("Index", "Eventos");
+                return RedirectToAction("Login");
             }
             else
             {
@@ -105,7 +105,7 @@ namespace MvcCoreProyectoSejo.Controllers
         {
             await this.repo.ActivateUserAsync(token);
             ViewData["MENSAJE"] = "Cuenta activada correctamente";
-            return View();
+            return RedirectToAction("Index", "Eventos");
         }
 
         public IActionResult Logout()

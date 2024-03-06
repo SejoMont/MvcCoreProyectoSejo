@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace MvcCoreProyectoSejo.Models
 {
-    public class UsuarioDetalles
+    public class ArtistaDetalles
     {
         [Key]
         [Column("UsuarioID")]
@@ -16,12 +16,6 @@ namespace MvcCoreProyectoSejo.Models
         [Column("FotoPerfil")]
         public string FotoPerfil { get; set; }
 
-        [Column("Correo")]
-        public string Correo { get; set; }
-
-        [Column("Telefono")]
-        public string Telefono { get; set; }
-
         [Column("ProvinciaID")]
         public int ProvinciaID { get; set; }
 
@@ -31,8 +25,13 @@ namespace MvcCoreProyectoSejo.Models
         [Column("Descripcion")]
         public string Descripcion { get; set; }
 
+        [Column("RolID")]
+        public int RolID { get; set; }
+
         [Column("NombreRol")]
         public string NombreRol { get; set; }
 
+        [Column("EventoID")]
+        public int EventoID { get; set; }
     }
 }

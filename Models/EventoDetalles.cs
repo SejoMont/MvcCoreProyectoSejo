@@ -48,6 +48,9 @@ namespace MvcCoreProyectoSejo.Models
         [Column("Descripcion")]
         public string Descripcion { get; set; }
 
+        [Column("Precio")]
+        public int Precio { get; set; }
+
         [Column("LinkMapsProvincia")]
         public string LinkMapsProvincia { get; set; }
     }

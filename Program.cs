@@ -18,10 +18,8 @@ builder.Services.AddTransient<HelperPathProvider>();
 
 builder.Services.AddTransient<EventosRepository>();
 builder.Services.AddTransient<UsuariosRepository>();
-string connectionString =
-    builder.Configuration.GetConnectionString("SqlServerSejo");
-builder.Services.AddDbContext<EventosContext>
-    (options => options.UseSqlServer(connectionString));
+string connectionString = builder.Configuration.GetConnectionString("SqlServerSejo");
+builder.Services.AddDbContext<EventosContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

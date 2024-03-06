@@ -18,6 +18,7 @@ using System.Diagnostics.Metrics;
 //    U.NombreUsuario AS Recinto,
 //    E.MayorDe18,
 //    E.Descripcion,
+//    E.Precio,
 //    E.LinkMapsProvincia
 //FROM Eventos E
 //JOIN TiposEventos TE ON E.TipoEventoID = TE.TipoEventoID

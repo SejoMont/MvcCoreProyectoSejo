@@ -4,66 +4,35 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="mt-4 mb-2">Eventos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<h2>Tipos de Eventos</h2>
-<ul>
+
+<h2 class="mb-3">Tipos de Eventos</h2>
+<ul class="list-unstyled">
     @foreach (var tipoEvento in ViewData["TipoEventos"] as List<TipoEvento>)
     {
         <li>
-            <a asp-controller="Eventos" asp-action="TipoEvento" asp-route-tipo="@tipoEvento.Nombre">@tipoEvento.Nombre</a>
+            <a asp-controller="Eventos" asp-action="TipoEvento" asp-route-tipo="@tipoEvento.Nombre" class="text-decoration-none text-dark">@tipoEvento.Nombre</a>
         </li>
     }
 </ul>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreEvento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fecha)
-                @Html.DisplayNameFor(model => model.Hora)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Ubicacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Imagen)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NombreEvento)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fecha)
-                    @Html.DisplayFor(modelItem => item.Hora)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ubicacion)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Imagen)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<div class="row row-cols-1 row-cols-md-4 g-4 mt-4">
+    @foreach (var evento in Model)
+    {
+        <div class="col mb-4">
+            <div class="card h-100">
+                <img src="@HelperPathProvider.MapUrlPath(evento.Imagen, Folders.Eventos)" class="card-img-top" style="height:300px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@evento.NombreEvento</h5>
+                    <p class="card-text">@evento.Descripcion</p>
+                    <p class="card-text"><strong>Precio:</strong> @evento.Precio €</p>
+                    <a asp-action="Details" asp-controller="Eventos" asp-route-id="@evento.Id" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

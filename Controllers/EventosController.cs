@@ -39,7 +39,7 @@ public class EventosController : Controller
     public async Task<IActionResult> Details(int id)
     {
         EventoDetalles eventoDetalles = await this.repo.GetDetallesEventoAsync(id);
-        List<UsuarioDetalles> artistas = await this.userRepo.GetAllArtistasEventoAsync(id);
+        List<ArtistaDetalles> artistas = await this.userRepo.GetAllArtistasEventoAsync(id);
 
         ViewData["Artistas"] = artistas;
 
