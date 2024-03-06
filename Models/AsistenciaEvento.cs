@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcCoreProyectoSejo.Models
 {
-    [Table("AsistenciasEventos")]
     public class AsistenciaEvento
     {
         [Key]
@@ -13,16 +13,19 @@ namespace MvcCoreProyectoSejo.Models
         [Column("UsuarioID")]
         public int UsuarioID { get; set; }
 
-        [ForeignKey("UsuarioID")]
-        public Usuario Usuario { get; set; }
-
         [Column("EventoID")]
         public int EventoID { get; set; }
 
-        [ForeignKey("EventoID")]
-        public Evento Evento { get; set; }
+        [Column("NombreEntrada")]
+        public string NombreEntrada { get; set; }
 
-        [Column("FechaAsistencia")]
-        public DateTime FechaAsistencia { get; set; }
+        [Column("CorreoEntrada")]
+        public string CorreoEntrada { get; set; }
+
+        [Column("DNIEntrada")]
+        public string DNIEntrada { get; set; }
+
+        [Column("QRImagen")]
+        public string QRImagen { get; set; }
     }
 }

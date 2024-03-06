@@ -1,6 +1,4 @@
-﻿
-
-#region VIEWS Y PROCEDURES
+﻿#region VIEWS Y PROCEDURES
 //CREATE VIEW VISTA_DETALLE_USUARIO AS
 //SELECT
 //    U.UsuarioID,
@@ -9,12 +7,14 @@
 //    U.Correo,
 //    U.Telefono,
 //    U.ProvinciaID,
+//    P.NombreProvincia,  
 //    U.Descripcion,
 //    R.NombreRol,
 //    AE.EventoID
 //FROM Usuarios U
 //INNER JOIN ArtistasEvento AE ON U.UsuarioID = AE.ArtistaID
-//INNER JOIN Roles R ON U.RolID = R.RolID;
+//INNER JOIN Roles R ON U.RolID = R.RolID
+//INNER JOIN Provincias P ON U.ProvinciaID = P.ProvinciaID;  
 
 //CREATE PROCEDURE SP_ARTISTAS_EVENTO(@idevento INT)
 //AS

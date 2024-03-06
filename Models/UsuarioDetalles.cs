@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcCoreProyectoSejo.Models
 {
@@ -10,28 +10,31 @@ namespace MvcCoreProyectoSejo.Models
         public int UsuarioID { get; set; }
 
         [Column("NombreUsuario")]
-        [StringLength(50)]
+        [Required]
         public string NombreUsuario { get; set; }
 
         [Column("FotoPerfil")]
         public string FotoPerfil { get; set; }
 
         [Column("Correo")]
-        [StringLength(100)]
         public string Correo { get; set; }
 
         [Column("Telefono")]
-        [StringLength(15)]
         public string Telefono { get; set; }
 
         [Column("ProvinciaID")]
         public int ProvinciaID { get; set; }
 
+        [Column("NombreProvincia")]
+        public string NombreProvincia { get; set; }  // Nueva propiedad para el nombre de la provincia
+
         [Column("Descripcion")]
         public string Descripcion { get; set; }
 
         [Column("NombreRol")]
-        [StringLength(20)]
         public string NombreRol { get; set; }
+
+        [Column("EventoID")]
+        public int EventoID { get; set; }
     }
 }

@@ -4,16 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcCoreProyectoSejo.Models
 {
-    [Table("Eventos")]
     public class Evento
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("EventoID")]
-        public int Id { get; set; }
+        public int EventoID { get; set; }
 
         [Column("NombreEvento")]
-        [StringLength(100)]
         [Required]
         public string NombreEvento { get; set; }
 
@@ -21,11 +18,9 @@ namespace MvcCoreProyectoSejo.Models
         public int TipoEventoID { get; set; }
 
         [Column("Fecha")]
-        [Required]
         public DateTime Fecha { get; set; }
 
         [Column("Hora")]
-        [Required]
         public TimeSpan Hora { get; set; }
 
         [Column("Ubicacion")]
@@ -35,7 +30,6 @@ namespace MvcCoreProyectoSejo.Models
         public int Provincia { get; set; }
 
         [Column("Aforo")]
-        [Required]
         public int Aforo { get; set; }
 
         [Column("Imagen")]
@@ -45,7 +39,6 @@ namespace MvcCoreProyectoSejo.Models
         public int Recinto { get; set; }
 
         [Column("MayorDe18")]
-        [Required]
         public bool MayorDe18 { get; set; }
 
         [Column("Descripcion")]
@@ -54,14 +47,10 @@ namespace MvcCoreProyectoSejo.Models
         [Column("LinkMapsProvincia")]
         public string LinkMapsProvincia { get; set; }
 
-        [ForeignKey("TipoEventoID")]
-        public TipoEvento TipoEvento { get; set; }
+        [Column("EntradasVendidas")]
+        public int EntradasVendidas { get; set; }
 
-        [ForeignKey("Provincia")]
-        public Provincia ProvinciaEvento { get; set; }
-
-        [ForeignKey("Recinto")]
-        public Usuario RecintoUsuario { get; set; }
-
+        [Column("AforoCompleto")]
+        public bool AforoCompleto { get; set; }
     }
 }
