@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcCoreProyectoSejo.Models
 {
+    [Table("VISTA_DETALLE_USUARIO")]
     public class UsuarioDetalles
     {
         [Key]

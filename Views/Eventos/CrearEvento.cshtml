@@ -1,0 +1,96 @@
+﻿@model MvcCoreProyectoSejo.Models.Evento
+@{
+    ViewData["Title"] = "Crear Evento";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="CrearEvento" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label class="control-label">Nombre: </label>
+        <input name="NombreEvento" class="form-control" />
+
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Tipo Evento:</label>
+        <select name="TipoEventoID" class="form-control">
+            <option value="">Seleccionar tipo de evento</option>
+            @foreach (var tipoEvento in ViewData["TiposEventos"] as List<TipoEvento>)
+            {
+                <option value="@tipoEvento.Id">@tipoEvento.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Fecha: </label>
+        <input name="Fecha" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Ubicacion: </label>
+        <input name="Ubicacion" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Provincia: </label>
+        <select name="Provincia" class="form-control">
+            <option value="">Seleccionar Provincia</option>
+            @foreach (var prov in ViewData["Provincias"] as List<Provincia>)
+            {
+                <option value="@prov.Id">@prov.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Aforo: </label>
+        <input name="Aforo" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Imagen</label>
+        <input name="Imagen" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Recinto</label>
+        <input name="Recinto" class="form-control" />
+
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Para Mayores de Edad</label>
+        <input name="MayorDe18" type="checkbox" class="form-check-input" />
+
+    </div>
+
+    <div class="form-group">
+        <labelclass ="control-label">
+            Descripción:</label>
+            <textarea name="Descripcion" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Link Maps: </label>
+        <input name="LinkMapsProvincia" class="form-control" />
+
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Precio: </label>
+        <input name="Precio" class="form-control" />
+
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Crear Evento</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

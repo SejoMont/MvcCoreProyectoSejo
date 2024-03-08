@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MvcCoreProyectoSejo.Models;
@@ -10,7 +11,6 @@ using System.Diagnostics.Metrics;
 //    E.NombreEvento,
 //    TE.Tipo AS TipoEvento,
 //    E.Fecha,
-//    E.Hora,
 //    E.Ubicacion,
 //    P.NombreProvincia AS Provincia,
 //    E.Aforo,
@@ -71,41 +71,46 @@ namespace MvcCoreProyectoSejo.Repository
 
         public async Task<List<EventoDetalles>> GetAllEventosAsync()
         {
-            string sql = "SP_ALL_EVENTOS";
-            var consulta = this.context.EventosDetalles.FromSqlRaw(sql);
-            return await consulta.ToListAsync();
+            var eventos = await this.context.EventosDetalles.ToListAsync();
+
+            return eventos;
         }
 
         public async Task<EventoDetalles> GetDetallesEventoAsync(int idevento)
         {
-            string sql = "SP_DETAILS_EVENTO @idevento";
-            SqlParameter pamId = new SqlParameter("@idevento", idevento);
-            var consulta = this.context.EventosDetalles.FromSqlRaw(sql, pamId);
-            EventoDetalles eventoDetalle = consulta.AsEnumerable().FirstOrDefault();
-            return eventoDetalle;
+            return await this.context.EventosDetalles.FirstOrDefaultAsync(z => z.Id == idevento);
         }
 
         public async Task<List<TipoEvento>> GetTipoEventosAsync()
         {
-            string sql = "select * from TiposEventos";
-            var consulta = this.context.TiposEventos.FromSqlRaw(sql);
-            return await consulta.ToListAsync();
+            var tiposevento = await this.context.TiposEventos.ToListAsync();
+
+            return tiposevento;
         }
 
         public async Task<List<EventoDetalles>> GetAllEventosTipoAsync(string tipo)
         {
-            string sql = "SP_EVENTOS_TIPO @tipoevento";
-            SqlParameter pamTipo = new SqlParameter("@tipoevento", tipo);
-            var consulta = this.context.EventosDetalles.FromSqlRaw(sql, pamTipo);
-            return await consulta.ToListAsync();
+            var eventos = await this.context.EventosDetalles
+                .Where(a => a.TipoEvento == tipo)
+                .ToListAsync();
+
+            return eventos;
         }
 
         public async Task<List<EventoDetalles>> GetAllEventosArtistaAsync(int idartista)
         {
-            string sql = "SP_EVENTOS_ARTISTA @idartista";
-            SqlParameter pamIdArtista= new SqlParameter("@idartista", idartista);
-            var consulta = this.context.EventosDetalles.FromSqlRaw(sql, pamIdArtista);
-            return await consulta.ToListAsync();
+            var eventos = await this.context.EventosDetalles
+                .Where(e => this.context.ArtistasEvento.Any(ae => ae.ArtistaID == idartista && ae.EventoID == e.Id))
+                .ToListAsync();
+
+            return eventos;
         }
+
+        public async Task CrearEventoAsync(Evento evento)
+        {
+            context.Eventos.Add(evento);
+            await context.SaveChangesAsync();
+        }
+
     }
 }

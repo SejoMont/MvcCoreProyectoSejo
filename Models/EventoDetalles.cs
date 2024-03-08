@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcCoreProyectoSejo.Models
 {
+    [Table("VISTA_DETALLES_EVENTO")]
     public class EventoDetalles
     {
         [Column("EventoID")]
@@ -20,10 +21,6 @@ namespace MvcCoreProyectoSejo.Models
         [Column("Fecha")]
         [Required]
         public DateTime Fecha { get; set; }
-
-        [Column("Hora")]
-        [Required]
-        public TimeSpan Hora { get; set; }
 
         [Column("Ubicacion")]
         public string Ubicacion { get; set; }

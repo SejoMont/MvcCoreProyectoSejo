@@ -66,20 +66,17 @@ namespace MvcCoreProyectoSejo.Repository
         }
         public async Task<List<ArtistaDetalles>> GetAllArtistasEventoAsync(int idevento)
         {
-            string sql = "SP_ARTISTAS_EVENTO @idevento";
-            SqlParameter pamId = new SqlParameter("@idevento", idevento);
-            var consulta = this.context.ArtistasDetalles.FromSqlRaw(sql, pamId);
-            return await consulta.ToListAsync();
-        }
+            var artistas = await this.context.ArtistasDetalles
+                .Where(a => a.EventoID == idevento)
+                .ToListAsync();
 
+            return artistas;
+        }
         public async Task<UsuarioDetalles> GetUsuarioDetalles(int iduser)
         {
-            string sql = "SP_USUARIO_DETALLE @idusuario";
-            SqlParameter pamId = new SqlParameter("@idusuario", iduser);
-            var consulta = this.context.UsuariosDetalles.FromSqlRaw(sql, pamId);
-            UsuarioDetalles usuarioDetalles = consulta.AsEnumerable().FirstOrDefault();
-            return usuarioDetalles;
+            return await this.context.UsuariosDetalles.FirstOrDefaultAsync(z => z.UsuarioID == iduser);
         }
+
         //---------------------- Registro / Login ----------------------//
         public bool EmailExists(string email)
         {
@@ -99,7 +96,7 @@ namespace MvcCoreProyectoSejo.Repository
             user.RolID = rol;
             user.ProvinciaID = 1;
             user.Telefono = "";
-            user.FotoPerfil = "";
+            user.FotoPerfil = "default-user.png";
             user.Descripcion = "";
             user.Activo = false;
             //CADA USUARIO TENDRA UN SALT DISTINTO 
