@@ -106,6 +106,7 @@ namespace MvcCoreProyectoSejo.Repository
                 HelperCryptography.EncryptPassword(password, user.Salt);
             user.Activo = false;
             user.TokenMail = HelperTools.GenerateTokenMail();
+
             this.context.Usuarios.Add(user);
             await this.context.SaveChangesAsync();
             return user;

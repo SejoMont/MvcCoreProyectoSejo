@@ -44,7 +44,7 @@ namespace MvcCoreProyectoSejo.Controllers
             {
                 Usuario user = repo.GetUser(correo);
                 HttpContext.Session.SetObject("CurrentUser", user);
-                return RedirectToAction("Index", "Eventos");
+                return RedirectToAction("Index", "Eventos", new { iduser = user.UsuarioID });
             }
             else
             {

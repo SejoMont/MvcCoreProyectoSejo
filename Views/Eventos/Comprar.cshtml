@@ -1,0 +1,53 @@
+﻿@model EventoDetalles
+@{
+    var usuario = Context.Session.GetObject<Usuario>("CurrentUser");
+}
+
+<h1>Comprar Entradas @Model.NombreEvento</h1>
+
+<h2>Numero de entradas: <input type="number" id="NumeroEntradas" value="1" /></h2>
+
+<form method="post" id="formEntradas">
+    <div id="entradasContainer"></div>
+
+    <button class="btn btn-outline-success">
+        Comprar
+    </button>
+
+    <!-- Mostrar errores de validación -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+</form>
+@section Scripts {
+    <script>
+        var usuarioId = @usuario.UsuarioID; // Asignar el valor a una variable de JavaScript
+
+        document.getElementById('NumeroEntradas').addEventListener('input', function () {
+            generarCamposDeEntrada(usuarioId); // Pasar la variable como parámetro
+        });
+
+        function generarCamposDeEntrada(usuarioId) {
+            var numeroEntradas = document.getElementById('NumeroEntradas').value;
+            var container = document.getElementById('entradasContainer');
+            container.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevos campos
+
+            for (var i = 0; i < numeroEntradas; i++) {
+                var entradaHtml =
+                    `<h3>Entrada ${i + 1}:</h3>
+                                                    <input type="hidden" name="entradas[${i}].UsuarioID" value="${usuarioId}" required />
+                                                    <input type="hidden" name="entradas[${i}].Qr" value="" required />
+                                                    <input type="hidden" name="entradas[${i}].EventoID" value="${@Model.Id}" required />
+                                                    <label>Nombre: <input type="text" name="entradas[${i}].Nombre" required /></label><br />
+                                                    <label>Correo: <input type="email" name="entradas[${i}].Correo" required /></label><br />
+                                                    <label>DNI: <input type="text" name="entradas[${i}].DNI" required /></label><br />
+                                                    <!-- Otros campos según sea necesario -->
+                                                    <hr />
+                                                    `;
+
+                container.innerHTML += entradaHtml;
+            }
+        }
+
+        // Llamar a la función una vez al cargar la página para generar los campos iniciales
+        generarCamposDeEntrada(usuarioId);
+    </script>
+}

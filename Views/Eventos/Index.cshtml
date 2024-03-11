@@ -2,13 +2,19 @@
 
 @{
     ViewData["Title"] = "Index";
+    var usuario = Context.Session.GetObject<Usuario>("CurrentUser");
+    UsuarioDetalles user = ViewData["UsuarioDetalle"] as UsuarioDetalles;
 }
 
 <h1 class="mt-4 mb-2">Eventos</h1>
 
-<p>
-    <a asp-action="CrearEvento" class="btn btn-primary">Create New</a>
-</p>
+@if (usuario != null && usuario.RolID == 3)
+{
+    <p>
+        <a asp-action="CrearEvento" class="btn btn-primary">Create New</a>
+    </p>
+}
+
 
 <h2 class="mb-3">Tipos de Eventos</h2>
 <ul class="list-unstyled">
@@ -20,19 +26,28 @@
     }
 </ul>
 
+@if (user != null)
+{
+    <h1>Eventos en @user.NombreProvincia</h1>
+}
+else
+{
+    <h1>Todos los eventos</h1>
+}
 <div class="row row-cols-1 row-cols-md-4 g-4 mt-4">
     @foreach (var evento in Model)
     {
-        <div class="col mb-4">
-            <div class="card h-100">
-                <img src="@HelperPathProvider.MapUrlPath(evento.Imagen, Folders.Eventos)" class="card-img-top" style="height:300px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@evento.NombreEvento</h5>
-                    <p class="card-text">@evento.Descripcion</p>
-                    <p class="card-text"><strong>Precio:</strong> @evento.Precio €</p>
-                    <a asp-action="Details" asp-controller="Eventos" asp-route-id="@evento.Id" class="btn btn-primary">Details</a>
+        <a asp-action="Details" asp-controller="Eventos" asp-route-id="@evento.Id">
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <img src="@HelperPathProvider.MapUrlPath(evento.Imagen, Folders.Eventos)" class="card-img-top" style="height:300px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@evento.NombreEvento</h5>
+                        <p class="card-text">@evento.Descripcion</p>
+                        <p class="card-text"><strong>Precio:</strong> @evento.Precio €</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
     }
 </div>

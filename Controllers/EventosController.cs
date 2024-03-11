@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MvcCoreProyectoSejo.Models;
 using MvcCoreProyectoSejo.Repository;
 
+
 public class EventosController : Controller
 {
     private EventosRepository repo;
@@ -17,16 +18,26 @@ public class EventosController : Controller
         this.provinciasRepo = provinciasRepo;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? iduser)
     {
-        List<EventoDetalles> eventos = await this.repo.GetAllEventosAsync();
+        List<EventoDetalles> eventos = new List<EventoDetalles>();
         List<TipoEvento> tipoEventos = await this.repo.GetTipoEventosAsync();
+
+        if (iduser == null)
+        {
+            eventos = await this.repo.GetAllEventosAsync();
+        }
+        else
+        {
+            UsuarioDetalles user = await this.userRepo.GetUsuarioDetalles(iduser ?? 0);
+            eventos = await this.repo.GetAllEventosProvinciasAsync(user.ProvinciaID);
+            ViewData["UsuarioDetalle"] = user;
+        }
 
         ViewData["TipoEventos"] = tipoEventos;
 
         return View(eventos);
     }
-
 
     public async Task<IActionResult> TipoEvento(string tipo)
     {
@@ -54,6 +65,26 @@ public class EventosController : Controller
         ViewData["TiposEventos"] = this.repo.GetTipoEventosAsync().Result;
         return View();
     }
+
+    public async Task<IActionResult> Comprar(int idevento)
+    {
+        EventoDetalles evento = await this.repo.GetDetallesEventoAsync(idevento);
+
+        return View(evento);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Comprar(int nentradas, List<AsistenciaEvento> entradas)
+    {
+
+        foreach (var entrada in entradas)
+        {
+            await repo.AsignarEntradasAsync(entrada.EventoID, entrada.UsuarioID, entrada.Nombre, entrada.Correo, entrada.Dni);
+            //await repo.RestarEntrada(entrada.EventoID);
+        }
+
+        return RedirectToAction("Index");
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> CrearEvento(string NombreEvento, int TipoEventoID, DateTime Fecha, string Ubicacion, int Provincia, int Aforo, string Imagen, int Recinto, bool MayorDe18, string Descripcion, string LinkMapsProvincia, decimal Precio)

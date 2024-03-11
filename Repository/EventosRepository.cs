@@ -13,6 +13,7 @@ using System.Diagnostics.Metrics;
 //    E.Fecha,
 //    E.Ubicacion,
 //    P.NombreProvincia AS Provincia,
+//    P.ProvinciaID,
 //    E.Aforo,
 //    E.Imagen,
 //    U.NombreUsuario AS Recinto,
@@ -106,11 +107,62 @@ namespace MvcCoreProyectoSejo.Repository
             return eventos;
         }
 
+        public async Task<List<EventoDetalles>> GetAllEventosProvinciasAsync(int idprovincia)
+        {
+            var eventos = await this.context.EventosDetalles
+                .Where(a => a.ProvinciaID == idprovincia)
+                .ToListAsync();
+
+            return eventos;
+        }
+
         public async Task CrearEventoAsync(Evento evento)
         {
             context.Eventos.Add(evento);
             await context.SaveChangesAsync();
         }
+
+        public async Task AsignarEntradasAsync(int idevento, int iduser, string nombre, string correo, string dni)
+        {
+            AsistenciaEvento nuevaEntrada = new AsistenciaEvento()
+            {
+                UsuarioID = iduser,
+                EventoID = idevento,
+                Nombre = nombre,
+                Correo = correo,
+                Dni = dni
+            };
+            context.AsistenciasEventos.Add(nuevaEntrada);
+        }
+
+        public async Task RestarEntrada(int idevento)
+        {
+            // Obtener el evento por su ID
+            var evento = await context.Eventos.FindAsync(idevento);
+
+            // Verificar si se encontró el evento
+            if (evento != null)
+            {
+                // Verificar si hay entradas disponibles para restar
+                if (evento.EntradasVendidas < evento.Aforo)
+                {
+                    // Restar una entrada
+                    evento.EntradasVendidas++;
+
+                    // Guardar los cambios en la base de datos
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new InvalidOperationException("El aforo ya está completo.");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("El evento no existe.");
+            }
+        }
+
 
     }
 }

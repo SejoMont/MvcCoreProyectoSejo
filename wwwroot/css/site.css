@@ -20,3 +20,13 @@ html {
 body {
     margin-bottom: 60px;
 }
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+    a:hover *{
+        color: black;
+        filter: brightness(0.95)
+    }

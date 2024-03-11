@@ -27,6 +27,8 @@ namespace MvcCoreProyectoSejo.Models
 
         [Column("Provincia")]
         public string Provincia { get; set; }
+        [Column("ProvinciaID")]
+        public int ProvinciaID { get; set; }
 
         [Column("Aforo")]
         [Required]
