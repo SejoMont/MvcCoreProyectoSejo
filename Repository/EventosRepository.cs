@@ -130,7 +130,8 @@ namespace MvcCoreProyectoSejo.Repository
                 EventoID = idevento,
                 Nombre = nombre,
                 Correo = correo,
-                Dni = dni
+                Dni = dni,
+                QR = ""
             };
             context.AsistenciasEventos.Add(nuevaEntrada);
         }
@@ -138,31 +139,60 @@ namespace MvcCoreProyectoSejo.Repository
         public async Task RestarEntrada(int idevento)
         {
             // Obtener el evento por su ID
-            var evento = await context.Eventos.FindAsync(idevento);
+
+            Evento evento = await this.context.Eventos.FirstOrDefaultAsync(e => e.EventoID == idevento);
 
             // Verificar si se encontró el evento
             if (evento != null)
             {
-                // Verificar si hay entradas disponibles para restar
-                if (evento.EntradasVendidas < evento.Aforo)
-                {
-                    // Restar una entrada
-                    evento.EntradasVendidas++;
+                // Restar una entrada
+                evento.Aforo--;
 
-                    // Guardar los cambios en la base de datos
-                    await context.SaveChangesAsync();
-                }
-                else
-                {
-                    throw new InvalidOperationException("El aforo ya está completo.");
-                }
+                // Guardar los cambios en la base de datos
+                await context.SaveChangesAsync();
             }
             else
             {
+                // Manejar el caso cuando el evento no se encuentra
                 throw new InvalidOperationException("El evento no existe.");
             }
         }
 
+        public async Task<List<EventoDetalles>> BuscarEventosPorFiltros(FiltroEvento filtro)
+        {
+            IQueryable<EventoDetalles> query = this.context.EventosDetalles;
 
+            if (!string.IsNullOrEmpty(filtro.Nombre))
+            {
+                query = query.Where(e => e.NombreEvento.Contains(filtro.Nombre));
+            }
+
+            if (filtro.FechaInicio.HasValue)
+            {
+                query = query.Where(e => e.Fecha == filtro.FechaInicio);
+            }
+
+            if (!string.IsNullOrEmpty(filtro.Provincia))
+            {
+                query = query.Where(e => e.Provincia == filtro.Provincia);
+            }
+
+            if (!string.IsNullOrEmpty(filtro.Tipo))
+            {
+                query = query.Where(e => e.TipoEvento == filtro.Tipo);
+            }
+
+            if (filtro.PrecioMayorQue.HasValue)
+            {
+                query = query.Where(e => e.Precio > filtro.PrecioMayorQue);
+            }
+
+            if (filtro.PrecioMenorQue.HasValue)
+            {
+                query = query.Where(e => e.Precio < filtro.PrecioMenorQue);
+            }
+
+            return await query.ToListAsync();
+        }
     }
 }

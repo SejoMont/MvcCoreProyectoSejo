@@ -1,12 +1,68 @@
 ﻿@model IEnumerable<MvcCoreProyectoSejo.Models.EventoDetalles>
-
 @{
     ViewData["Title"] = "Index";
     var usuario = Context.Session.GetObject<Usuario>("CurrentUser");
     UsuarioDetalles user = ViewData["UsuarioDetalle"] as UsuarioDetalles;
+    List<Provincia> provincias = ViewData["Provincias"] as List<Provincia>;
+    List<TipoEvento> tiposEvento = ViewData["TipoEventos"] as List<TipoEvento>;
+
+    // Variables para los valores de los filtros
+    var nombreFilter = Context.Request.Query["nombre"];
+    var fechaInicioFilter = Context.Request.Query["fechaInicio"];
+    var provinciaFilter = Context.Request.Query["provincia"];
+    var tipoFilter = Context.Request.Query["tipo"];
+    var precioMayorQueFilter = Context.Request.Query["precioMayorQue"];
+    var precioMenorQueFilter = Context.Request.Query["precioMenorQue"];
 }
 
 <h1 class="mt-4 mb-2">Eventos</h1>
+
+<!-- Formulario de búsqueda -->
+<div class="container mt-4">
+    <form asp-controller="Eventos" asp-action="Index" method="get" class="row g-3 align-items-center">
+        <div class="col-md-3">
+            <label for="nombre" class="visually-hidden">Nombre del Evento</label>
+            <input type="text" class="form-control" name="nombre" placeholder="Nombre del Evento" value="@nombreFilter">
+        </div>
+        <div class="col-md-2">
+            <label for="fechaInicio" class="visually-hidden">Fecha de Inicio</label>
+            <input type="date" class="form-control" name="fechaInicio" value="@fechaInicioFilter">
+        </div>
+        <div class="col-md-2">
+            <label for="provincia" class="visually-hidden">Provincia</label>
+            <select class="form-control" name="provincia">
+                <option value="">- Todas las Provincias -</option>
+                @foreach (var prov in provincias)
+                {
+                    <option value="@prov.Nombre" selected="@(prov.Nombre == provinciaFilter)">@prov.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label for="tipo" class="visually-hidden">Tipo de Evento</label>
+            <select class="form-control" name="tipo">
+                <option value="">- Todos los Eventos -</option>
+                @foreach (var tipo in tiposEvento)
+                {
+                    <option value="@tipo.Nombre" selected="@(tipo.Nombre == tipoFilter)">@tipo.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label for="precioMayorQue" class="visually-hidden">Precio Mayor que</label>
+            <input type="number" class="form-control" name="precioMayorQue" placeholder="Min" value="@precioMayorQueFilter">
+        </div>
+        <div class="col-md-1">
+            <label for="precioMenorQue" class="visually-hidden">Precio Menor que</label>
+            <input type="number" class="form-control" name="precioMenorQue" placeholder="Max" value="@precioMenorQueFilter">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </form>
+</div>
+
+<hr />
 
 @if (usuario != null && usuario.RolID == 3)
 {
@@ -15,25 +71,24 @@
     </p>
 }
 
-
-<h2 class="mb-3">Tipos de Eventos</h2>
-<ul class="list-unstyled">
-    @foreach (var tipoEvento in ViewData["TipoEventos"] as List<TipoEvento>)
-    {
-        <li>
-            <a asp-controller="Eventos" asp-action="TipoEvento" asp-route-tipo="@tipoEvento.Nombre" class="text-decoration-none text-dark">@tipoEvento.Nombre</a>
-        </li>
-    }
-</ul>
-
-@if (user != null)
+@if (!string.IsNullOrEmpty(tipoFilter) && !string.IsNullOrEmpty(provinciaFilter))
 {
-    <h1>Eventos en @user.NombreProvincia</h1>
+    <h1>@tipoFilter en @provinciaFilter</h1>
+}
+else if (!string.IsNullOrEmpty(provinciaFilter))
+{
+    <h1>Eventos en @provinciaFilter</h1>
+}
+else if (!string.IsNullOrEmpty(tipoFilter))
+{
+    <h1>Todos los @tipoFilter</h1>
 }
 else
 {
-    <h1>Todos los eventos</h1>
+    <h1>Todos los Eventos</h1>
 }
+
+<!-- Resultados de búsqueda -->
 <div class="row row-cols-1 row-cols-md-4 g-4 mt-4">
     @foreach (var evento in Model)
     {
@@ -43,7 +98,8 @@ else
                     <img src="@HelperPathProvider.MapUrlPath(evento.Imagen, Folders.Eventos)" class="card-img-top" style="height:300px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title">@evento.NombreEvento</h5>
-                        <p class="card-text">@evento.Descripcion</p>
+                        <p class="card-text"><strong>Ciudad:</strong> @evento.Provincia</p>
+                        <p class="card-text"><strong>Tipo:</strong> @evento.TipoEvento</p>
                         <p class="card-text"><strong>Precio:</strong> @evento.Precio €</p>
                     </div>
                 </div>

@@ -50,6 +50,6 @@ namespace MvcCoreProyectoSejo.Models
         [Column("AforoCompleto")]
         public bool AforoCompleto { get; set; }
         [Column("Precio")]
-        public decimal Precio { get; set; }
+        public int Precio { get; set; }
     }
 }

@@ -18,26 +18,34 @@ public class EventosController : Controller
         this.provinciasRepo = provinciasRepo;
     }
 
-    public async Task<IActionResult> Index(int? iduser)
+    [HttpGet]
+    public async Task<IActionResult> Index(int? iduser, [FromQuery] FiltroEvento filtro)
     {
         List<EventoDetalles> eventos = new List<EventoDetalles>();
         List<TipoEvento> tipoEventos = await this.repo.GetTipoEventosAsync();
+        List<Provincia> provincias = await this.provinciasRepo.GetAllProvinciassAsync();
 
-        if (iduser == null)
-        {
-            eventos = await this.repo.GetAllEventosAsync();
-        }
-        else
+        if (iduser != null)
         {
             UsuarioDetalles user = await this.userRepo.GetUsuarioDetalles(iduser ?? 0);
-            eventos = await this.repo.GetAllEventosProvinciasAsync(user.ProvinciaID);
             ViewData["UsuarioDetalle"] = user;
         }
 
+        if (filtro != null && filtro.TieneFiltros())
+        {
+            eventos = await this.repo.BuscarEventosPorFiltros(filtro);
+        }
+        else
+        {
+            eventos = await this.repo.GetAllEventosAsync();
+        }
+
         ViewData["TipoEventos"] = tipoEventos;
+        ViewData["Provincias"] = provincias;
 
         return View(eventos);
     }
+
 
     public async Task<IActionResult> TipoEvento(string tipo)
     {
@@ -79,7 +87,7 @@ public class EventosController : Controller
         foreach (var entrada in entradas)
         {
             await repo.AsignarEntradasAsync(entrada.EventoID, entrada.UsuarioID, entrada.Nombre, entrada.Correo, entrada.Dni);
-            //await repo.RestarEntrada(entrada.EventoID);
+            await repo.RestarEntrada(entrada.EventoID);
         }
 
         return RedirectToAction("Index");
@@ -87,7 +95,7 @@ public class EventosController : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> CrearEvento(string NombreEvento, int TipoEventoID, DateTime Fecha, string Ubicacion, int Provincia, int Aforo, string Imagen, int Recinto, bool MayorDe18, string Descripcion, string LinkMapsProvincia, decimal Precio)
+    public async Task<IActionResult> CrearEvento(string NombreEvento, int TipoEventoID, DateTime Fecha, string Ubicacion, int Provincia, int Aforo, string Imagen, int Recinto, bool MayorDe18, string Descripcion, string LinkMapsProvincia, int Precio)
     {
         try
         {

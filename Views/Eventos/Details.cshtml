@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    var usuario = Context.Session.GetObject<Usuario>("CurrentUser");
 }
 
 <div class="container">
@@ -70,8 +71,14 @@
     </div>
 
     <div class="mt-3">
-        <a asp-action="Comprar" asp-route-idevento="@Model.Id" class="btn btn-outline-success">Comprar</a>
-        <a asp-action="Edit" class="btn btn-primary">Edit</a>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        @if (usuario != null)
+        {
+            <a asp-action="Comprar" asp-route-idevento="@Model.Id" class="btn btn-outline-success">Comprar</a>
+        }
+        else
+        {
+            <button disabled class="btn btn-outline-danger">Logueate para Comprar Entradas</button>
+        }
+
     </div>
 </div>
