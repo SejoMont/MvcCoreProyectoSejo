@@ -122,20 +122,6 @@ namespace MvcCoreProyectoSejo.Repository
             await context.SaveChangesAsync();
         }
 
-        public async Task AsignarEntradasAsync(int idevento, int iduser, string nombre, string correo, string dni)
-        {
-            AsistenciaEvento nuevaEntrada = new AsistenciaEvento()
-            {
-                UsuarioID = iduser,
-                EventoID = idevento,
-                Nombre = nombre,
-                Correo = correo,
-                Dni = dni,
-                QR = ""
-            };
-            context.AsistenciasEventos.Add(nuevaEntrada);
-        }
-
         public async Task RestarEntrada(int idevento)
         {
             // Obtener el evento por su ID
@@ -146,7 +132,7 @@ namespace MvcCoreProyectoSejo.Repository
             if (evento != null)
             {
                 // Restar una entrada
-                evento.Aforo--;
+                evento.EntradasVendidas++;
 
                 // Guardar los cambios en la base de datos
                 await context.SaveChangesAsync();

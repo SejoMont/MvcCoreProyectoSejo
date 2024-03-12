@@ -72,6 +72,8 @@ namespace MvcCoreProyectoSejo.Repository
 
             return artistas;
         }
+
+
         public async Task<UsuarioDetalles> GetUsuarioDetalles(int iduser)
         {
             return await this.context.UsuariosDetalles.FirstOrDefaultAsync(z => z.UsuarioID == iduser);

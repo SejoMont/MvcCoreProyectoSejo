@@ -12,13 +12,18 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSession();
 
+// Agrega servicios al contenedor de dependencias.
+builder.Services.AddScoped<UploadFilesController>();
+
 builder.Services.AddTransient<HelperMails>();
 builder.Services.AddTransient<HelperTools>();
 builder.Services.AddTransient<HelperPathProvider>();
 
+builder.Services.AddTransient<EntradasRepository>();
 builder.Services.AddTransient<EventosRepository>();
 builder.Services.AddTransient<UsuariosRepository>();
 builder.Services.AddTransient<ProvinciasRepository>();
+
 string connectionString = builder.Configuration.GetConnectionString("SqlServerSejo");
 builder.Services.AddDbContext<EventosContext>(options => options.UseSqlServer(connectionString));
 

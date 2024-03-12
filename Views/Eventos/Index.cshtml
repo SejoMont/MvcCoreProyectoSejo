@@ -19,7 +19,7 @@
 
 <!-- Formulario de búsqueda -->
 <div class="container mt-4">
-    <form asp-controller="Eventos" asp-action="Index" method="get" class="row g-3 align-items-center">
+    <form id="searchForm" asp-controller="Eventos" asp-action="Index" method="get" class="row g-3 align-items-center">
         <div class="col-md-3">
             <label for="nombre" class="visually-hidden">Nombre del Evento</label>
             <input type="text" class="form-control" name="nombre" placeholder="Nombre del Evento" value="@nombreFilter">
@@ -107,3 +107,18 @@ else
         </a>
     }
 </div>
+
+
+
+@section Scripts {
+    <script>
+        // Obtener el formulario
+        var form = document.getElementById("searchForm");
+
+        // Agregar un listener al formulario para detectar cambios en los filtros
+        form.addEventListener("change", function () {
+            // Enviar el formulario automáticamente al detectar cambios
+            form.submit();
+        });
+    </script>
+}

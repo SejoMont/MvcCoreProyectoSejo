@@ -1,11 +1,14 @@
 ﻿@model MvcCoreProyectoSejo.Models.Evento
 @{
     ViewData["Title"] = "Crear Evento";
+    var usuario = Context.Session.GetObject<Usuario>("CurrentUser");
 }
 
 <h2>@ViewData["Title"]</h2>
 
 <form asp-action="CrearEvento" method="post" enctype="multipart/form-data">
+    <input name="Recinto" value="@usuario.UsuarioID" type="hidden" class="form-control" />
+    <input name="Recinto" value="@usuario.UsuarioID" type="hidden" class="form-control" />
     <div class="form-group">
         <label class="control-label">Nombre: </label>
         <input name="NombreEvento" class="form-control" />
@@ -46,18 +49,12 @@
 
     <div class="form-group">
         <label class="control-label">Aforo: </label>
-        <input name="Aforo" class="form-control" />
+        <input type="number" name="Aforo" class="form-control" />
     </div>
 
     <div class="form-group">
         <label class="control-label">Imagen</label>
-        <input name="Imagen" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Recinto</label>
-        <input name="Recinto" class="form-control" />
-
+        <input name="Imagen" type="file" class="form-control" />
     </div>
 
     <div class="form-group">
@@ -80,7 +77,7 @@
 
     <div class="form-group">
         <label class="control-label">Precio: </label>
-        <input name="Precio" class="form-control" />
+        <input name="Precio" type="number" class="form-control" />
 
     </div>
 

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MvcCoreProyectoSejo.Models
 {
+    [Table("Eventos")]
     public class Evento
     {
         [Key]
@@ -46,9 +47,6 @@ namespace MvcCoreProyectoSejo.Models
 
         [Column("EntradasVendidas")]
         public int EntradasVendidas { get; set; }
-
-        [Column("AforoCompleto")]
-        public bool AforoCompleto { get; set; }
         [Column("Precio")]
         public int Precio { get; set; }
     }
