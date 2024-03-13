@@ -55,13 +55,18 @@
                 </ul>
             </div>
             <div class="mt-3">
-                @if (usuario != null)
+                @if (usuario == null)
+                {
+                    <button disabled class="btn btn-danger btn-block">Inicia sesión para comprar entradas</button>
+
+                }
+                else if(Model.Aforo > Model.EntradasVendidas)
                 {
                     <a asp-action="Comprar" asp-route-idevento="@Model.Id" class="btn btn-success btn-block">Comprar Entradas</a>
                 }
                 else
                 {
-                    <button disabled class="btn btn-danger btn-block">Inicia sesión para comprar entradas</button>
+                    <button disabled class="btn btn-danger btn-block">AGOTADO</button>
                 }
             </div>
         </div>

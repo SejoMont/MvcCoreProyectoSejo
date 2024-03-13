@@ -5,58 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using MvcCoreProyectoSejo.Models;
 using System.Diagnostics.Metrics;
 #region VISTAS Y PROCEDURES
-//CREATE VIEW VISTA_DETALLES_EVENTO AS
+//ALTER VIEW VISTA_DETALLES_EVENTO AS
 //SELECT
 //    E.EventoID,
-//    E.NombreEvento,
-//    TE.Tipo AS TipoEvento,
-//    E.Fecha,
-//    E.Ubicacion,
-//    P.NombreProvincia AS Provincia,
-//    P.ProvinciaID,
-//    E.Aforo,
-//    E.Imagen,
-//    U.NombreUsuario AS Recinto,
-//    E.MayorDe18,
-//    E.Descripcion,
-//    E.Precio,
-//    E.LinkMapsProvincia
+//  E.NombreEvento,
+//  TE.Tipo AS TipoEvento,
+//  E.Fecha,
+//  E.Ubicacion,
+//  P.NombreProvincia AS Provincia,
+//  P.ProvinciaID,
+//  E.Aforo,
+//  E.EntradasVendidas,
+//  E.Imagen,
+//  U.NombreUsuario AS Recinto,
+//  E.MayorDe18,
+//  E.Descripcion,
+//  E.Precio,
+//  E.LinkMapsProvincia
 //FROM Eventos E
 //JOIN TiposEventos TE ON E.TipoEventoID = TE.TipoEventoID
 //JOIN Provincias P ON E.Provincia = P.ProvinciaID
 //JOIN Usuarios U ON E.Recinto = U.UsuarioID;
-
-//CREATE PROCEDURE SP_ALL_EVENTOS
-//AS
-//BEGIN
-//    SELECT *
-//    FROM VISTA_DETALLES_EVENTO
-//END;
-
-//CREATE PROCEDURE SP_DETAILS_EVENTO(@idevento INT)
-//AS
-//BEGIN
-//    SELECT *
-//    FROM VISTA_DETALLES_EVENTO
-//    WHERE EventoID = @idevento;
-//END;
-
-//CREATE PROCEDURE SP_EVENTOS_TIPO(@tipoevento nvarchar(50))
-//AS
-//BEGIN
-//    SELECT *
-//    FROM VISTA_DETALLES_EVENTO
-//    WHERE TipoEvento = @tipoevento;
-//END;
-
-//CREATE PROCEDURE SP_EVENTOS_ARTISTA
-//    @idartista INT
-//AS
-//BEGIN
-//    SELECT *
-//    FROM VISTA_DETALLES_EVENTO
-//    WHERE EventoID IN (SELECT EventoID FROM ArtistasEvento WHERE ArtistaID = @idartista);
-//END;
 #endregion
 
 namespace MvcCoreProyectoSejo.Repository
@@ -69,6 +38,21 @@ namespace MvcCoreProyectoSejo.Repository
         {
             this.context = context;
         }
+
+        public async Task<List<EventoDetalles>> GetAllEventosHoyAsync()
+        {
+            // Obtener la fecha de hoy
+            DateTime fechaHoy = DateTime.Today;
+
+            // Filtrar los eventos que ocurran a partir de hoy y ordenarlos por fecha
+            var eventos = await this.context.EventosDetalles
+                .Where(e => e.Fecha >= fechaHoy)
+                .OrderBy(e => e.Fecha)
+                .ToListAsync();
+
+            return eventos;
+        }
+
 
         public async Task<List<EventoDetalles>> GetAllEventosAsync()
         {

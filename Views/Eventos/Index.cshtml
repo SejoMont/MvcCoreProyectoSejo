@@ -18,48 +18,50 @@
 <h1 class="mt-4 mb-2">Eventos</h1>
 
 <!-- Formulario de búsqueda -->
-<div class="container mt-4">
-    <form id="searchForm" asp-controller="Eventos" asp-action="Index" method="get" class="row g-3 align-items-center">
-        <div class="col-md-3">
-            <label for="nombre" class="visually-hidden">Nombre del Evento</label>
-            <input type="text" class="form-control" name="nombre" placeholder="Nombre del Evento" value="@nombreFilter">
-        </div>
-        <div class="col-md-2">
-            <label for="fechaInicio" class="visually-hidden">Fecha de Inicio</label>
-            <input type="date" class="form-control" name="fechaInicio" value="@fechaInicioFilter">
-        </div>
-        <div class="col-md-2">
-            <label for="provincia" class="visually-hidden">Provincia</label>
-            <select class="form-control" name="provincia">
-                <option value="">- Todas las Provincias -</option>
-                @foreach (var prov in provincias)
-                {
-                    <option value="@prov.Nombre" selected="@(prov.Nombre == provinciaFilter)">@prov.Nombre</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-2">
-            <label for="tipo" class="visually-hidden">Tipo de Evento</label>
-            <select class="form-control" name="tipo">
-                <option value="">- Todos los Eventos -</option>
-                @foreach (var tipo in tiposEvento)
-                {
-                    <option value="@tipo.Nombre" selected="@(tipo.Nombre == tipoFilter)">@tipo.Nombre</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-1">
-            <label for="precioMayorQue" class="visually-hidden">Precio Mayor que</label>
-            <input type="number" class="form-control" name="precioMayorQue" placeholder="Min" value="@precioMayorQueFilter">
-        </div>
-        <div class="col-md-1">
-            <label for="precioMenorQue" class="visually-hidden">Precio Menor que</label>
-            <input type="number" class="form-control" name="precioMenorQue" placeholder="Max" value="@precioMenorQueFilter">
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </div>
-    </form>
+<div class="filtros">
+    <div class="container mt-4" style="padding:25px">
+        <form id="searchForm" asp-controller="Eventos" asp-action="Index" method="get" class="row g-3 align-items-center">
+            <div class="col-md-3">
+                <label for="nombre" class="visually-hidden">Nombre del Evento</label>
+                <input type="text" class="form-control" name="nombre" placeholder="Nombre del Evento" value="@nombreFilter">
+            </div>
+            <div class="col-md-2">
+                <label for="fechaInicio" class="visually-hidden">Fecha de Inicio</label>
+                <input type="date" class="form-control" name="fechaInicio" value="@fechaInicioFilter">
+            </div>
+            <div class="col-md-2">
+                <label for="provincia" class="visually-hidden">Provincia</label>
+                <select class="form-control" name="provincia">
+                    <option value="">- Todas las Provincias -</option>
+                    @foreach (var prov in provincias)
+                    {
+                        <option value="@prov.Nombre" selected="@(prov.Nombre == provinciaFilter)">@prov.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="tipo" class="visually-hidden">Tipo de Evento</label>
+                <select class="form-control" name="tipo">
+                    <option value="">- Todos los Eventos -</option>
+                    @foreach (var tipo in tiposEvento)
+                    {
+                        <option value="@tipo.Nombre" selected="@(tipo.Nombre == tipoFilter)">@tipo.Nombre</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-1">
+                <label for="precioMayorQue" class="visually-hidden">Precio Mayor que</label>
+                <input type="number" class="form-control" name="precioMayorQue" placeholder="Min" value="@precioMayorQueFilter">
+            </div>
+            <div class="col-md-1">
+                <label for="precioMenorQue" class="visually-hidden">Precio Menor que</label>
+                <input type="number" class="form-control" name="precioMenorQue" placeholder="Max" value="@precioMenorQueFilter">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <hr />
@@ -89,18 +91,22 @@ else
 }
 
 <!-- Resultados de búsqueda -->
+
 <div class="row row-cols-1 row-cols-md-4 g-4 mt-4">
     @foreach (var evento in Model)
     {
         <a asp-action="Details" asp-controller="Eventos" asp-route-id="@evento.Id">
             <div class="col mb-4">
-                <div class="card h-100">
+                <div class="card h-100 position-relative">
                     <img src="@HelperPathProvider.MapUrlPath(evento.Imagen, Folders.Eventos)" class="card-img-top" style="height:300px; object-fit: cover;">
+
                     <div class="card-body">
-                        <h5 class="card-title">@evento.NombreEvento</h5>
-                        <p class="card-text"><strong>Ciudad:</strong> @evento.Provincia</p>
-                        <p class="card-text"><strong>Tipo:</strong> @evento.TipoEvento</p>
-                        <p class="card-text"><strong>Precio:</strong> @evento.Precio €</p>
+                        <h4 class="card-title" style="top: 15px">@evento.NombreEvento</h4>
+                        <div class="card-text">
+                            <p class="mb-0"><strong>Ciudad:</strong> @evento.Provincia</p>
+                            <p class="mb-0"><strong>Tipo:</strong> @evento.TipoEvento</p>
+                            <p class="mb-0"><strong>Precio:</strong> @evento.Precio €</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,7 +114,42 @@ else
     }
 </div>
 
-
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        @if (ViewBag.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="First">
+                    <span aria-hidden="true">&laquo;&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page=@(ViewBag.PageNumber - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
+                <a class="page-link" href="?page=@i&@ViewBag.FiltersQueryString">@i</a>
+            </li>
+        }
+        @if (ViewBag.PageNumber < ViewBag.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="?page=@(ViewBag.PageNumber + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page=@ViewBag.TotalPages" aria-label="Last">
+                    <span aria-hidden="true">&raquo;&raquo;</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
 
 @section Scripts {
     <script>

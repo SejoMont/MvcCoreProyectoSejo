@@ -28,11 +28,17 @@
         var usuarioId = @usuario.UsuarioID;
 
         document.getElementById('NumeroEntradas').addEventListener('input', function () {
-            generarCamposDeEntrada(usuarioId);
+            var numeroEntradas = parseInt(this.value);
+            var aforoRestante = @Model.Aforo - @Model.EntradasVendidas;
+            var maxEntradas = Math.min(aforoRestante, 5); // Máximo de 5 entradas o las disponibles si son menos
+            if (numeroEntradas > maxEntradas) {
+                alert("No puedes comprar más de " + maxEntradas + " entradas.");
+                this.value = maxEntradas; // Establecer el valor máximo disponible
+            }
+            generarCamposDeEntrada(usuarioId, Math.min(numeroEntradas, maxEntradas)); // Llamar a la función con el mínimo entre el número ingresado y el máximo permitido
         });
 
-        function generarCamposDeEntrada(usuarioId) {
-            var numeroEntradas = document.getElementById('NumeroEntradas').value;
+        function generarCamposDeEntrada(usuarioId, numeroEntradas) {
             var container = document.getElementById('entradasContainer');
             container.innerHTML = '';
 
@@ -69,6 +75,6 @@
             }
         }
 
-        generarCamposDeEntrada(usuarioId);
+        generarCamposDeEntrada(usuarioId, 1); // Llamar a la función con 1 como valor inicial
     </script>
 }

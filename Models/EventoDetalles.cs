@@ -33,6 +33,8 @@ namespace MvcCoreProyectoSejo.Models
         [Column("Aforo")]
         [Required]
         public int Aforo { get; set; }
+        [Column("EntradasVendidas")]
+        public int EntradasVendidas { get; set; }
 
         [Column("Imagen")]
         public string Imagen { get; set; }

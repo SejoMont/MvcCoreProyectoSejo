@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using MvcCoreProyectoSejo.Helpers;
 using MvcCoreProyectoSejo.Models;
@@ -26,8 +27,11 @@ public class EventosController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(int? iduser, [FromQuery] FiltroEvento filtro)
+    public async Task<IActionResult> Index(int? iduser, [FromQuery] FiltroEvento filtro, int page = 1)
     {
+        // Cantidad de eventos por página
+        int pageSize = 8;
+
         List<EventoDetalles> eventos = new List<EventoDetalles>();
         List<TipoEvento> tipoEventos = await this.repo.GetTipoEventosAsync();
         List<Provincia> provincias = await this.provinciasRepo.GetAllProvinciassAsync();
@@ -44,15 +48,40 @@ public class EventosController : Controller
         }
         else
         {
-            eventos = await this.repo.GetAllEventosAsync();
+            eventos = await this.repo.GetAllEventosHoyAsync();
         }
+
+        // Paginar la lista de eventos
+        var model = eventos.Skip((page - 1) * pageSize).Take(pageSize);
 
         ViewData["TipoEventos"] = tipoEventos;
         ViewData["Provincias"] = provincias;
 
-        return View(eventos);
-    }
+        // Agregar información de paginación a la vista
+        ViewBag.PageNumber = page;
+        ViewBag.TotalPages = Math.Ceiling((double)eventos.Count / pageSize);
 
+        // Construir la cadena de consulta para los filtros
+        string filtersQueryString = string.Empty;
+        if (filtro != null)
+        {
+            var queryParameters = new Dictionary<string, string>
+            {
+                { "nombre", filtro.Nombre },
+                { "fechaInicio", filtro.FechaInicio.HasValue ? filtro.FechaInicio.Value.ToString("yyyy-MM-dd") : "" },
+                { "provincia", filtro.Provincia },
+                { "tipo", filtro.Tipo },
+                { "precioMayorQue", filtro.PrecioMayorQue.HasValue ? filtro.PrecioMayorQue.Value.ToString() : "" },
+                { "precioMenorQue", filtro.PrecioMenorQue.HasValue ? filtro.PrecioMenorQue.Value.ToString() : "" }
+            };
+            filtersQueryString = QueryHelpers.AddQueryString("", queryParameters);
+        }
+
+        // Agregar la cadena de consulta a la vista
+        ViewBag.FiltersQueryString = filtersQueryString;
+
+        return View(model);
+    }
 
     public async Task<IActionResult> TipoEvento(string tipo)
     {
@@ -153,6 +182,4 @@ public class EventosController : Controller
             return View("CrearEvento");
         }
     }
-
-
 }
