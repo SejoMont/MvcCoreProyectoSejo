@@ -41,6 +41,8 @@ namespace MvcCoreProyectoSejo.Models
 
         [Column("Recinto")]
         public string Recinto { get; set; }
+        [Column("RecintoID")]
+        public int RecintoId { get; set; }
 
         [Column("MayorDe18")]
         [Required]

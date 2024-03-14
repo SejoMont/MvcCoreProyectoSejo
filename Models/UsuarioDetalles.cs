@@ -34,6 +34,8 @@ namespace MvcCoreProyectoSejo.Models
 
         [Column("NombreRol")]
         public string NombreRol { get; set; }
+        [Column("RolID")]
+        public int RolID { get; set; }
 
     }
 }

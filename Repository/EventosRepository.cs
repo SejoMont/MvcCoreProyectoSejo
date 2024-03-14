@@ -18,6 +18,7 @@ using System.Diagnostics.Metrics;
 //  E.EntradasVendidas,
 //  E.Imagen,
 //  U.NombreUsuario AS Recinto,
+//  U.UsuarioID AS RecintoID,
 //  E.MayorDe18,
 //  E.Descripcion,
 //  E.Precio,
@@ -126,6 +127,15 @@ namespace MvcCoreProyectoSejo.Repository
                 // Manejar el caso cuando el evento no se encuentra
                 throw new InvalidOperationException("El evento no existe.");
             }
+        }
+
+        public async Task BorrarEvento(int idevento)
+        {
+            // Buscar el evento por su ID
+            var evento = await this.context.Eventos.FindAsync(idevento);
+
+            // Eliminar el evento de la base de datos
+            this.context.Eventos.Remove(evento);
         }
 
         public async Task<List<EventoDetalles>> BuscarEventosPorFiltros(FiltroEvento filtro)

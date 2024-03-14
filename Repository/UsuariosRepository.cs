@@ -1,5 +1,5 @@
 ﻿#region VIEWS Y PROCEDURES
-//CREATE VIEW VISTA_DETALLE_USUARIO AS
+//ALTER VIEW VISTA_DETALLE_USUARIO AS
 //SELECT
 //    U.UsuarioID,
 //    U.NombreUsuario,
@@ -10,7 +10,8 @@
 //    P.NombreProvincia,
 //    U.Descripcion,
 //    U.Activo,
-//    R.NombreRol
+//    R.NombreRol,
+//    R.RolID
 //FROM Usuarios U
 //INNER JOIN Roles R ON U.RolID = R.RolID
 //INNER JOIN Provincias P ON U.ProvinciaID = P.ProvinciaID;
@@ -30,23 +31,6 @@
 //inner join artistasevento ae on u.usuarioid = ae.artistaid
 //inner join roles r on u.rolid = r.rolid
 //inner join provincias p on u.provinciaid = p.provinciaid;  
-
-//CREATE PROCEDURE SP_ARTISTAS_EVENTO(@idevento INT)
-//AS
-//BEGIN
-//    SELECT *
-//    FROM vista_detalle_artista
-//    WHERE EventoID = @idevento;
-//END;
-
-//CREATE PROCEDURE SP_USUARIO_DETALLE
-//    (@idusuario INT)
-//AS
-//BEGIN
-//    SELECT *
-//    FROM VISTA_DETALLE_USUARIO
-//    WHERE UsuarioID = @idusuario;
-//END;
 #endregion
 
 using Microsoft.Data.SqlClient;
@@ -73,6 +57,14 @@ namespace MvcCoreProyectoSejo.Repository
             return artistas;
         }
 
+        public async Task<List<UsuarioDetalles>> GetAllArtistas()
+        {
+            var artistas = await this.context.UsuariosDetalles
+                .Where(r => r.RolID == 2)
+                .ToListAsync();
+
+            return artistas;
+        }
 
         public async Task<UsuarioDetalles> GetUsuarioDetalles(int iduser)
         {

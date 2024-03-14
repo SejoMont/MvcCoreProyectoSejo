@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@560&family=Space+Grotesk:wght@300..700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+/*@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,636;1,636&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+*/
 html {
     font-size: 14px;
 }
@@ -20,13 +21,11 @@ html {
 }
 
 body {
-    font-family: "Space Grotesk", sans-serif;
-    font-optical-sizing: auto;
+    font-family: "Rubik", sans-serif;
     color: whitesmoke;
-    /*    font-weight: <weight>;*/
-    font-style: normal;
     margin-bottom: 60px;
     background-color: #131316;
+    border: none;
 }
 
 a {
@@ -50,7 +49,6 @@ a {
 .filtros, .card {
     background-color: #1C1C21;
     color: whitesmoke;
-    border: none;
     border-radius: 7px; /* Ajusta el valor según lo redondeado que desees los bordes */
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); /* Ajusta los valores según el tamaño y color de la sombra */
 }

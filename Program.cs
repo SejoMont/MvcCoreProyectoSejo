@@ -20,6 +20,7 @@ builder.Services.AddTransient<HelperTools>();
 builder.Services.AddTransient<HelperPathProvider>();
 
 builder.Services.AddTransient<EntradasRepository>();
+builder.Services.AddTransient<ArtistasEventoRepository>();
 builder.Services.AddTransient<EventosRepository>();
 builder.Services.AddTransient<UsuariosRepository>();
 builder.Services.AddTransient<ProvinciasRepository>();

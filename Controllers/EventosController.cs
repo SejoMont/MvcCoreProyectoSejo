@@ -6,7 +6,6 @@ using MvcCoreProyectoSejo.Helpers;
 using MvcCoreProyectoSejo.Models;
 using MvcCoreProyectoSejo.Repository;
 
-
 public class EventosController : Controller
 {
     private EventosRepository repo;

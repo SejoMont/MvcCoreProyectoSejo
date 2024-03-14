@@ -1,0 +1,20 @@
+﻿@model List<UsuarioDetalles>
+
+@{
+    EventoDetalles evento = ViewData["Evento"] as EventoDetalles;
+    var usuario = Context.Session.GetObject<Usuario>("CurrentUser");
+}
+
+<form method="post">
+    <input name="idevento" value="@evento.Id" type="hidden" />
+    <div class="input-group mb-3">
+        <select class="form-control" name="idartista" id="nombreArtista">
+            <option value="">Selecciona un artista</option>
+            @foreach (var artista in Model)
+            {
+                <option value="@artista.UsuarioID">@artista.NombreUsuario</option>
+            }
+        </select>
+        <button class="btn btn-outline-secondary">Añadir</button>
+    </div>
+</form>

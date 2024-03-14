@@ -15,11 +15,9 @@
     var precioMenorQueFilter = Context.Request.Query["precioMenorQue"];
 }
 
-<h1 class="mt-4 mb-2">Eventos</h1>
-
 <!-- Formulario de búsqueda -->
 <div class="filtros">
-    <div class="container mt-4" style="padding:25px">
+    <div class="container mt-4" style="padding-bottom: 20px">
         <form id="searchForm" asp-controller="Eventos" asp-action="Index" method="get" class="row g-3 align-items-center">
             <div class="col-md-3">
                 <label for="nombre" class="visually-hidden">Nombre del Evento</label>
@@ -51,14 +49,14 @@
             </div>
             <div class="col-md-1">
                 <label for="precioMayorQue" class="visually-hidden">Precio Mayor que</label>
-                <input type="number" class="form-control" name="precioMayorQue" placeholder="Min" value="@precioMayorQueFilter">
+                <input type="number" class="form-control" name="precioMayorQue" placeholder="€ Min" value="@precioMayorQueFilter">
             </div>
             <div class="col-md-1">
                 <label for="precioMenorQue" class="visually-hidden">Precio Menor que</label>
-                <input type="number" class="form-control" name="precioMenorQue" placeholder="Max" value="@precioMenorQueFilter">
+                <input type="number" class="form-control" name="precioMenorQue" placeholder="€ Max" value="@precioMenorQueFilter">
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Buscar</button>
+                <button type="submit" class="btn" style="background-color:#35FF57; color: black">Buscar</button>
             </div>
         </form>
     </div>
@@ -66,28 +64,13 @@
 
 <hr />
 
+
+
 @if (usuario != null && usuario.RolID == 3)
 {
     <p>
         <a asp-action="CrearEvento" class="btn btn-primary">Create New</a>
     </p>
-}
-
-@if (!string.IsNullOrEmpty(tipoFilter) && !string.IsNullOrEmpty(provinciaFilter))
-{
-    <h1>@tipoFilter en @provinciaFilter</h1>
-}
-else if (!string.IsNullOrEmpty(provinciaFilter))
-{
-    <h1>Eventos en @provinciaFilter</h1>
-}
-else if (!string.IsNullOrEmpty(tipoFilter))
-{
-    <h1>Todos los @tipoFilter</h1>
-}
-else
-{
-    <h1>Todos los Eventos</h1>
 }
 
 <!-- Resultados de búsqueda -->
@@ -113,37 +96,36 @@ else
         </a>
     }
 </div>
-
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" >
     <ul class="pagination justify-content-center">
         @if (ViewBag.PageNumber > 1)
         {
-            <li class="page-item">
-                <a class="page-link" href="?page=1" aria-label="First">
+            <li class="page-item" >
+                <a class="page-link" href="?page=1" aria-label="First" style="background-color:#1C1C21; color: white;">
                     <span aria-hidden="true">&laquo;&laquo;</span>
                 </a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="?page=@(ViewBag.PageNumber - 1)" aria-label="Previous">
+                <a class="page-link" href="?page=@(ViewBag.PageNumber - 1)" aria-label="Previous" style="background-color:#1C1C21; color: white;">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
         }
         @for (int i = 1; i <= ViewBag.TotalPages; i++)
         {
-            <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
-                <a class="page-link" href="?page=@i&@ViewBag.FiltersQueryString">@i</a>
+            <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")" style="border: none;">
+                <a class="page-link" href="?page=@i&@ViewBag.FiltersQueryString" style="background-color:@(i == ViewBag.PageNumber ? "#35FF57" : "#1C1C21"); color: @(i == ViewBag.PageNumber ? "black" : "white"); @(i == ViewBag.PageNumber ? "font-weight: bold;" : "")">@i</a>
             </li>
         }
         @if (ViewBag.PageNumber < ViewBag.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" href="?page=@(ViewBag.PageNumber + 1)" aria-label="Next">
+                <a class="page-link" href="?page=@(ViewBag.PageNumber + 1)" aria-label="Next" style="background-color:#1C1C21; color: white;">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="?page=@ViewBag.TotalPages" aria-label="Last">
+                <a class="page-link" href="?page=@ViewBag.TotalPages" aria-label="Last" style="background-color:#1C1C21; color: white;">
                     <span aria-hidden="true">&raquo;&raquo;</span>
                 </a>
             </li>
