@@ -92,12 +92,15 @@ public class EventosController : Controller
         return View(eventos);
     }
 
+
     public async Task<IActionResult> Details(int id)
     {
         EventoDetalles eventoDetalles = await this.repo.GetDetallesEventoAsync(id);
         List<ArtistaDetalles> artistas = await this.userRepo.GetAllArtistasEventoAsync(id);
+        List<ComentarioDetalles> comentarios = await this.repo.GetComentariosByEventoIdAsync(id);
 
         ViewData["Artistas"] = artistas;
+        ViewData["Comentarios"] = comentarios;
 
         return View(eventoDetalles);
     }
@@ -128,6 +131,21 @@ public class EventosController : Controller
         return RedirectToAction("Index");
     }
 
+    [HttpPost]
+    public async Task<IActionResult> AddComentario(int eventoId, string texto, int userId, int puntuacion)
+    {
+        var comentario = new Comentario
+        {
+            EventoID = eventoId,
+            UsuarioID = userId,
+            Texto = texto,
+            FechaCreacion = DateTime.Now,
+            Puntuacion = puntuacion
+        };
+
+        await repo.AddComentarioAsync(comentario);
+        return RedirectToAction("Details", new { id = eventoId });
+    }
 
     [HttpPost]
     public async Task<IActionResult> CrearEvento(string NombreEvento, int TipoEventoID, DateTime Fecha, string Ubicacion, int Provincia, int Aforo, IFormFile Imagen, int Recinto, bool MayorDe18, string Descripcion, string LinkMapsProvincia, int Precio)

@@ -16,12 +16,13 @@ namespace MvcCoreProyectoSejo.Models
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Evento> Eventos { get; set; }
         public DbSet<ArtistaEvento> ArtistasEvento { get; set; }
-        public DbSet<Resena> Resenas { get; set; }
+        public DbSet<Comentario> Comentarios { get; set; }
+        public DbSet<ComentarioDetalles> ComentariosDetalles { get; set; }
         public DbSet<AsistenciaEvento> AsistenciasEventos { get; set; }
         public DbSet<Seguimiento> Seguimientos { get; set; }
         public DbSet<EventoDetalles> EventosDetalles { get; set; }
         public DbSet<UsuarioDetalles> UsuariosDetalles { get; set; }
         public DbSet<ArtistaDetalles> ArtistasDetalles { get; set; }
-        public DbSet<EntradaDetalles> EntradaDetalles { get;  set; }
+        public DbSet<EntradaDetalles> EntradaDetalles { get; set; }
     }
 }

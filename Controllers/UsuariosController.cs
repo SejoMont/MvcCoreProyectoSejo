@@ -25,9 +25,18 @@ namespace MvcCoreProyectoSejo.Controllers
         public async Task<IActionResult> Details(int iduser)
         {
             UsuarioDetalles usuarioDetalles = await this.repo.GetUsuarioDetalles(iduser);
-            List<EventoDetalles> eventos = await this.eventosRepo.GetAllEventosArtistaAsync(iduser);
+            List<EventoDetalles> eventosAsociados = await this.eventosRepo.GetAllEventosArtistaAsync(iduser);
 
-            ViewData["Eventos"] = eventos;
+            // Obtener la fecha de hoy
+            DateTime fechaHoy = DateTime.Today;
+
+            // Filtrar y ordenar eventos pasados y próximos eventos
+            List<EventoDetalles> eventosPasados = eventosAsociados.Where(e => e.Fecha < fechaHoy).OrderBy(e => e.Fecha).ToList();
+            List<EventoDetalles> eventosProximos = eventosAsociados.Where(e => e.Fecha >= fechaHoy).OrderBy(e => e.Fecha).ToList();
+
+            // Pasar eventos pasados y próximos eventos a la vista
+            ViewData["EventosPasados"] = eventosPasados;
+            ViewData["EventosProximos"] = eventosProximos;
 
             return View(usuarioDetalles);
         }

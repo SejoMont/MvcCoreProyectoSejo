@@ -68,3 +68,28 @@ a {
         Para navegadores WebKit mask-image: linear-gradient(to top, transparent 1%, black 50%);
         Para otros navegadores
     }
+
+/* Ocultar los radios */
+.rating input[type="radio"] {
+    display: none;
+}
+
+/* Usar flexbox para invertir el orden de las estrellas */
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+    /* Estilos para las estrellas */
+    .rating label {
+        font-size: 2em;
+        color: #ccc;
+        cursor: pointer;
+    }
+
+        .rating label:hover,
+        .rating label:hover ~ label,
+        .rating input[type="radio"]:checked ~ label {
+            color: orange;
+        }

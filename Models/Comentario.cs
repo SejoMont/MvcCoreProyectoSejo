@@ -3,35 +3,35 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MvcCoreProyectoSejo.Models
 {
-    [Table("Resenas")]
-    public class Resena
+    [Table("Comentarios")]
+    public class Comentario
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("ResenaID")]
-        public int Id { get; set; }
+        [Column("ComentarioID")]
+        public int ComentarioID { get; set; }
+
+        [Column("EventoID")]
+        public int EventoID { get; set; }
 
         [Column("UsuarioID")]
         public int UsuarioID { get; set; }
 
-        [Column("RolReviewId")]
-        public int RolReviewId { get; set; }
-
-        [Column("Comentario")]
-        public string Comentario { get; set; }
+        [Column("Texto")]
+        public string Texto { get; set; }
 
         [Column("Puntuacion")]
         [Range(1, 5)]
         public int Puntuacion { get; set; }
 
-        [Column("FechaResena")]
-        public DateTime FechaResena { get; set; }
+        [Column("FechaCreacion")]
+        public DateTime FechaCreacion { get; set; }
 
         [ForeignKey("UsuarioID")]
         public Usuario Usuario { get; set; }
 
-        [ForeignKey("RolReviewId")]
-        public Usuario RolReview { get; set; }
+        [ForeignKey("EventoID")]
+        public Evento Evento { get; set; }
     }
 
 }

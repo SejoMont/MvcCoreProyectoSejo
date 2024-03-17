@@ -138,6 +138,20 @@ namespace MvcCoreProyectoSejo.Repository
             this.context.Eventos.Remove(evento);
         }
 
+        public async Task AddComentarioAsync(Comentario resena)
+        {
+            context.Comentarios.Add(resena);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<List<ComentarioDetalles>> GetComentariosByEventoIdAsync(int eventoId)
+        {
+            return await context.ComentariosDetalles
+                                 .Where(r => r.EventoID == eventoId)
+                                 .Include(r => r.Usuario)
+                                 .ToListAsync();
+        }
+
         public async Task<List<EventoDetalles>> BuscarEventosPorFiltros(FiltroEvento filtro)
         {
             IQueryable<EventoDetalles> query = this.context.EventosDetalles;
