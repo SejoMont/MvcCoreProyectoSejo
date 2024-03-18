@@ -24,5 +24,6 @@ namespace MvcCoreProyectoSejo.Models
         public DbSet<UsuarioDetalles> UsuariosDetalles { get; set; }
         public DbSet<ArtistaDetalles> ArtistasDetalles { get; set; }
         public DbSet<EntradaDetalles> EntradaDetalles { get; set; }
+        public DbSet<Artista> Artistas { get; set; }
     }
 }

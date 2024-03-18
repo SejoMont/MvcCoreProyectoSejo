@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MvcCoreProyectoSejo.Models;
+using Newtonsoft.Json;
 using System.Diagnostics.Metrics;
+using System.Text.Json.Nodes;
 #region VISTAS Y PROCEDURES
 //ALTER VIEW VISTA_DETALLES_EVENTO AS
 //SELECT
@@ -92,6 +94,13 @@ namespace MvcCoreProyectoSejo.Repository
             return eventos;
         }
 
+        public async Task<List<EventoDetalles>> GetEventosPorRecintoAsync(int idRecinto)
+        {
+            return await this.context.EventosDetalles
+                .Where(e => e.RecintoId == idRecinto)
+                .ToListAsync();
+        }
+
         public async Task<List<EventoDetalles>> GetAllEventosProvinciasAsync(int idprovincia)
         {
             var eventos = await this.context.EventosDetalles
@@ -151,6 +160,17 @@ namespace MvcCoreProyectoSejo.Repository
                                  .Include(r => r.Usuario)
                                  .ToListAsync();
         }
+
+        public async Task<IActionResult> BuscarArtistas(string term)
+        {
+            var artistas = await context.ArtistasDetalles
+                              .Where(a => a.NombreUsuario.Contains(term))
+                              .Select(a => new { label = a.NombreUsuario, value = a.UsuarioID })
+                              .ToListAsync();
+
+            return new JsonResult(artistas);
+        }
+
 
         public async Task<List<EventoDetalles>> BuscarEventosPorFiltros(FiltroEvento filtro)
         {

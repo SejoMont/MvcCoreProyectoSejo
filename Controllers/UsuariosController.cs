@@ -25,21 +25,37 @@ namespace MvcCoreProyectoSejo.Controllers
         public async Task<IActionResult> Details(int iduser)
         {
             UsuarioDetalles usuarioDetalles = await this.repo.GetUsuarioDetalles(iduser);
-            List<EventoDetalles> eventosAsociados = await this.eventosRepo.GetAllEventosArtistaAsync(iduser);
+            // Asume que el rol del usuario está almacenado en el modelo UsuarioDetalles
+            int rolId = usuarioDetalles.RolID;
 
-            // Obtener la fecha de hoy
+            List<EventoDetalles> eventosAsociados = new List<EventoDetalles>();
+
+            switch (rolId)
+            {
+                case 1: // Usuario Corriente
+                        // Asume la existencia de un método que obtiene eventos por asistencia para un usuario
+                    //eventosAsociados = await this.eventosRepo.GetEventosPorAsistenciaUsuarioAsync(iduser);
+                    break;
+                case 2: // Artista
+                    eventosAsociados = await this.eventosRepo.GetAllEventosArtistaAsync(iduser);
+                    break;
+                case 3: // Recinto
+                        // Asume la existencia de un método que obtiene eventos asociados a un recinto
+                    eventosAsociados = await this.eventosRepo.GetEventosPorRecintoAsync(iduser);
+                    break;
+            }
+
             DateTime fechaHoy = DateTime.Today;
 
-            // Filtrar y ordenar eventos pasados y próximos eventos
             List<EventoDetalles> eventosPasados = eventosAsociados.Where(e => e.Fecha < fechaHoy).OrderBy(e => e.Fecha).ToList();
             List<EventoDetalles> eventosProximos = eventosAsociados.Where(e => e.Fecha >= fechaHoy).OrderBy(e => e.Fecha).ToList();
 
-            // Pasar eventos pasados y próximos eventos a la vista
             ViewData["EventosPasados"] = eventosPasados;
             ViewData["EventosProximos"] = eventosProximos;
 
             return View(usuarioDetalles);
         }
+
         public IActionResult Login()
         {
             return View();

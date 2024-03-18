@@ -57,6 +57,7 @@ namespace MvcCoreProyectoSejo.Repository
             return artistas;
         }
 
+
         public async Task<List<UsuarioDetalles>> GetAllArtistas()
         {
             var artistas = await this.context.UsuariosDetalles

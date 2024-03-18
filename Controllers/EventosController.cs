@@ -12,10 +12,17 @@ public class EventosController : Controller
     private UsuariosRepository userRepo;
     private ProvinciasRepository provinciasRepo;
     private EntradasRepository entradasRepo;
+    private ArtistasEventoRepository artistsRepo;
     private HelperPathProvider helperPathProvider;
     private UploadFilesController uploadFilesController;
 
-    public EventosController(EventosRepository repo, UsuariosRepository userRepo, ProvinciasRepository provinciasRepo, EntradasRepository entradasRepo, HelperPathProvider helperPathProvider, UploadFilesController uploadFilesController)
+    public EventosController(EventosRepository repo, 
+        UsuariosRepository userRepo, 
+        ProvinciasRepository provinciasRepo, 
+        EntradasRepository entradasRepo, 
+        HelperPathProvider helperPathProvider, 
+        UploadFilesController uploadFilesController, 
+        ArtistasEventoRepository artistsRepo)
     {
         this.repo = repo;
         this.userRepo = userRepo;
@@ -23,6 +30,7 @@ public class EventosController : Controller
         this.entradasRepo = entradasRepo;
         this.helperPathProvider = helperPathProvider;
         this.uploadFilesController = uploadFilesController;
+        this.artistsRepo = artistsRepo;
     }
 
     [HttpGet]
@@ -98,8 +106,10 @@ public class EventosController : Controller
         EventoDetalles eventoDetalles = await this.repo.GetDetallesEventoAsync(id);
         List<ArtistaDetalles> artistas = await this.userRepo.GetAllArtistasEventoAsync(id);
         List<ComentarioDetalles> comentarios = await this.repo.GetComentariosByEventoIdAsync(id);
+        List<Artista> artistasEvento = await this.artistsRepo.GetArtistasTempAsync(id);
 
-        ViewData["Artistas"] = artistas;
+        ViewData["ArtistasUsers"] = artistas;
+        ViewData["ArtistasEvento"] = artistasEvento;
         ViewData["Comentarios"] = comentarios;
 
         return View(eventoDetalles);
@@ -155,7 +165,7 @@ public class EventosController : Controller
             if (Imagen != null && Imagen.Length > 0)
             {
                 // Llamar al método SubirFichero del controlador UploadFilesController
-                await uploadFilesController.SubirFichero(Imagen);
+                await uploadFilesController.SubirFicheroEventos(Imagen);
 
                 // Obtener la ruta completa del archivo utilizando el HelperPathProvider
                 string nombreArchivo = Imagen.FileName;

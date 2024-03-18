@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MvcCoreProyectoSejo.Models;
 
 namespace MvcCoreProyectoSejo.Repository
@@ -14,13 +15,27 @@ namespace MvcCoreProyectoSejo.Repository
 
         public async Task AddArtistaToEvento(int idevento, int idartista)
         {
-            ArtistaEvento artistaEvento = new ArtistaEvento
+            var existeArtistaEnEvento = await this.context.ArtistasEvento
+                .AnyAsync(ae => ae.EventoID == idevento && ae.ArtistaID == idartista);
+
+            if (!existeArtistaEnEvento)
             {
-                EventoID = idevento,
-                ArtistaID = idartista
-            };
-            this.context.ArtistasEvento.Add(artistaEvento);
-            await this.context.SaveChangesAsync();
+                ArtistaEvento artistaEvento = new ArtistaEvento
+                {
+                    EventoID = idevento,
+                    ArtistaID = idartista
+                };
+                this.context.ArtistasEvento.Add(artistaEvento);
+                await this.context.SaveChangesAsync();
+            }
         }
+
+        public async Task<List<Artista>> GetArtistasTempAsync(int idevento)
+        {
+            return await context.Artistas
+                                 .Where(r => r.IdEvento == idevento)
+                                 .ToListAsync();
+        }
+
     }
 }

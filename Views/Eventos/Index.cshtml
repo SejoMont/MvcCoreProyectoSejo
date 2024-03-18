@@ -79,16 +79,20 @@
     @foreach (var evento in Model)
     {
         <a asp-action="Details" asp-controller="Eventos" asp-route-id="@evento.Id">
-            <div class="col mb-4">
-                <div class="card h-100 position-relative">
+            <div class="col mb-4 card-container">
+                <div class="card h-100 position-relative"> 
                     <img src="@HelperPathProvider.MapUrlPath(evento.Imagen, Folders.Eventos)" class="card-img-top" style="height:300px; object-fit: cover;">
-
-                    <div class="card-body">
-                        <h4 class="card-title" style="top: 15px">@evento.NombreEvento</h4>
-                        <div class="card-text">
-                            <p class="mb-0"><strong>Ciudad:</strong> @evento.Provincia</p>
+                    <div class="card-body" style="top: -40px;  position: relative;">
+                        <h4 class="card-title card-title-overlay titulo" style="top: 15px">@evento.NombreEvento</h4>
+                        <div class="card-text" style="height:20px">
+                            <label style="color: #35FF57">@evento.Fecha.ToString("ddd, dd MMM", new System.Globalization.CultureInfo("es-ES")) - @evento.Provincia</label>
+                            <br />
+                            <label>@evento.Recinto</label>
+                            <br />
+                            <label>@evento.Precio €</label>
+                            @* <p class="mb-0"><strong>Ciudad:</strong> @evento.Provincia</p>
                             <p class="mb-0"><strong>Tipo:</strong> @evento.TipoEvento</p>
-                            <p class="mb-0"><strong>Precio:</strong> @evento.Precio €</p>
+                            <p class="mb-0"><strong>Precio:</strong> @evento.Precio €</p> *@
                         </div>
                     </div>
                 </div>
