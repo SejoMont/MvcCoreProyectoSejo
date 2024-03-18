@@ -93,6 +93,9 @@ a {
         filter: brightness(0.95);
     }
 
+.link {
+    color: #35FF57;
+}
 .link:hover {
     color: #35FF57
 }
@@ -149,8 +152,8 @@ a {
         border-radius: 7px;
         object-fit: cover;
         -webkit-mask-image: linear-gradient(to top, transparent 1%, black 50%);
-        Para navegadores WebKit mask-image: linear-gradient(to top, transparent 1%, black 50%);
-        Para otros navegadores
+        mask-image: linear-gradient(to top, transparent 1%, black 50%);
+        
     }
 
 /* Ocultar los radios */
@@ -177,3 +180,14 @@ a {
         .rating input[type="radio"]:checked ~ label {
             color: #35FF57;
         }
+
+.square-image {
+    width: 100%; /* Establece el ancho al 100% */
+    height: auto; /* Permite que la altura se ajuste automáticamente para mantener la proporción */
+    aspect-ratio: 1 / 1; /* Establece la relación de aspecto a 1:1 para que la imagen sea cuadrada */
+    object-fit: cover;
+}
+
+.lista {
+    background-color: "#1C1C21";
+}

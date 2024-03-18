@@ -121,6 +121,58 @@ public class EventosController : Controller
         ViewData["TiposEventos"] = this.repo.GetTipoEventosAsync().Result;
         return View();
     }
+    [HttpPost]
+    public async Task<IActionResult> CrearEvento(string NombreEvento, int TipoEventoID, DateTime Fecha, string Ubicacion, int Provincia, int Aforo, IFormFile Imagen, int Recinto, bool MayorDe18, string Descripcion, string LinkMapsProvincia, int Precio)
+    {
+        try
+        {
+            if (Imagen != null && Imagen.Length > 0)
+            {
+                // Llamar al método SubirFichero del controlador UploadFilesController
+                await uploadFilesController.SubirFicheroEventos(Imagen);
+
+                // Obtener la ruta completa del archivo utilizando el HelperPathProvider
+                string nombreArchivo = Imagen.FileName;
+
+                // Mapear el modelo de vista a la entidad de Evento
+                var nuevoEvento = new Evento
+                {
+                    NombreEvento = NombreEvento,
+                    Fecha = Fecha,
+                    TipoEventoID = TipoEventoID,
+                    Ubicacion = Ubicacion,
+                    Provincia = Provincia,
+                    Aforo = Aforo,
+                    Imagen = nombreArchivo, 
+                    Recinto = Recinto,
+                    MayorDe18 = MayorDe18,
+                    Descripcion = Descripcion,
+                    LinkMapsProvincia = LinkMapsProvincia,
+                    EntradasVendidas = 0,
+                    Precio = Precio
+                };
+
+                // Llamar al repositorio para crear el evento (asincrónico)
+                await this.repo.CrearEventoAsync(nuevoEvento);
+
+                // Redirigir a la página de detalles del evento recién creado
+                return RedirectToAction("Details", new { id = nuevoEvento.EventoID });
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Por favor, seleccione una imagen.");
+                ViewData["Provincias"] = await provinciasRepo.GetAllProvinciassAsync();
+                ViewData["TiposEventos"] = await repo.GetTipoEventosAsync();
+                return View("CrearEvento");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejar la excepción
+            ModelState.AddModelError(string.Empty, "Error al procesar la solicitud. Por favor, inténtalo de nuevo.");
+            return View("CrearEvento");
+        }
+    }
 
     public async Task<IActionResult> Comprar(int idevento)
     {
@@ -157,56 +209,5 @@ public class EventosController : Controller
         return RedirectToAction("Details", new { id = eventoId });
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CrearEvento(string NombreEvento, int TipoEventoID, DateTime Fecha, string Ubicacion, int Provincia, int Aforo, IFormFile Imagen, int Recinto, bool MayorDe18, string Descripcion, string LinkMapsProvincia, int Precio)
-    {
-        try
-        {
-            if (Imagen != null && Imagen.Length > 0)
-            {
-                // Llamar al método SubirFichero del controlador UploadFilesController
-                await uploadFilesController.SubirFicheroEventos(Imagen);
-
-                // Obtener la ruta completa del archivo utilizando el HelperPathProvider
-                string nombreArchivo = Imagen.FileName;
-
-                // Mapear el modelo de vista a la entidad de Evento
-                var nuevoEvento = new Evento
-                {
-                    NombreEvento = NombreEvento,
-                    Fecha = Fecha,
-                    TipoEventoID = TipoEventoID,
-                    Ubicacion = Ubicacion,
-                    Provincia = Provincia,
-                    Aforo = Aforo,
-                    Imagen = nombreArchivo, // Usar la URL completa del archivo
-                    Recinto = Recinto,
-                    MayorDe18 = MayorDe18,
-                    Descripcion = Descripcion,
-                    LinkMapsProvincia = LinkMapsProvincia,
-                    EntradasVendidas = 0,
-                    Precio = Precio
-                };
-
-                // Llamar al repositorio para crear el evento (asincrónico)
-                await this.repo.CrearEventoAsync(nuevoEvento);
-
-                // Redirigir a la página de detalles del evento recién creado
-                return RedirectToAction("Details", new { id = nuevoEvento.EventoID });
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Por favor, seleccione una imagen.");
-                ViewData["Provincias"] = await provinciasRepo.GetAllProvinciassAsync();
-                ViewData["TiposEventos"] = await repo.GetTipoEventosAsync();
-                return View("CrearEvento");
-            }
-        }
-        catch (Exception ex)
-        {
-            // Manejar la excepción
-            ModelState.AddModelError(string.Empty, "Error al procesar la solicitud. Por favor, inténtalo de nuevo.");
-            return View("CrearEvento");
-        }
-    }
+    
 }
