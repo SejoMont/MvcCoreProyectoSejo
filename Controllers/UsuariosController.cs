@@ -148,45 +148,5 @@ namespace MvcCoreProyectoSejo.Controllers
             }
             return View(usuarioDetalles);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(int id, UsuarioDetalles usuarioDetalles)
-        {
-            Usuario usuario = await this.repo.GetUser(id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            usuario.NombreUsuario = usuarioDetalles.NombreUsuario;
-            usuario.Correo = usuarioDetalles.Correo;
-            usuario.Telefono = usuarioDetalles.Telefono;
-
-            // Procesar la nueva foto de perfil si se ha subido una nueva
-            if (nuevaFoto != null && nuevaFoto.Length > 0)
-            {
-                string rutaFoto = Path.Combine(env.WebRootPath, "images", nuevaFoto.FileName);
-                using (var fileStream = new FileStream(rutaFoto, FileMode.Create))
-                {
-                    await nuevaFoto.CopyToAsync(fileStream);
-                }
-                usuario.FotoPerfil = nuevaFoto.FileName; // Asumiendo que guardas el nombre de la imagen
-            }
-
-            await this.repo.UpdateUserAsync(usuario);
-
-                return RedirectToAction(nameof(Details), new { id = usuario.UsuarioID });
-            }
-            return View(usuarioDetalles);
-        }
-
-        private bool UsuarioExists(int id)
-        {
-            return this.repo.GetUsuarioDetalles(id) != null;
-        }
-
-        // ... (otros métodos del controlador)
     }
-
-}
 }
